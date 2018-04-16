@@ -1,0 +1,289 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bigMainlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.assignment.knowledgebooster.OwnProfile.OwnProfileFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="118dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorAccent"
+        >
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
+            app:srcCompat="@mipmap/ic_user_round"
+            android:onClick="mCallOwnDetails"
+            />
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imageButton"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/imageButton"
+            android:text="Name"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="11dp"
+            android:layout_toRightOf="@+id/imageButton" />
+
+        <TextView
+            android:id="@+id/txtPointLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/imageButton"
+            android:layout_alignStart="@+id/txtName"
+            android:layout_below="@id/txtName"
+            android:layout_marginTop="35dp"
+            android:text="Point"
+            android:textSize="13dp"
+            android:layout_alignLeft="@+id/txtName" />
+
+        <TextView
+            android:id="@+id/txtRankingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageButton"
+            android:layout_alignStart="@+id/txtRanking"
+            android:text="Ranking"
+            android:textSize="13dp"
+            android:layout_alignLeft="@+id/txtRanking" />
+
+        <TextView
+            android:id="@+id/txtPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/txtName"
+            android:layout_below="@+id/txtName"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            android:layout_alignLeft="@id/txtName" />
+
+        <TextView
+            android:id="@+id/txtRanking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txtPoint"
+            android:layout_alignBottom="@+id/txtPoint"
+            android:layout_toEndOf="@+id/txtName"
+            android:text="TextView"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/txtName" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="116dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        >
+
+        <Button
+            android:id="@+id/btnQuestionAnswered"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btnAnswered"
+            android:background="@drawable/button_border"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="4dp"
+            />
+
+        <Button
+            android:id="@+id/btnFollowing"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btnFollow"
+            android:background="@drawable/button_border"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="4dp"
+            />
+
+        <Button
+            android:id="@+id/btnFollower"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btnFollower"
+            android:background="@drawable/button_border"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="4dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="168dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        >
+
+        <Button
+            android:id="@+id/btnFavourite"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Favourite"
+            android:textAlignment="textStart"
+            android:background="@drawable/button_border"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:gravity="start" />
+
+        <Button
+            android:id="@+id/btnRanking"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Ranking"
+            android:textAlignment="textStart"
+            android:background="@drawable/button_border"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:gravity="start" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:background="@drawable/button_border"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="4dp"
+        >
+
+        <Button
+            android:id="@+id/btnNightMode"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:text="Tangan Cacat"
+            android:gravity="start"
+
+            android:onClick="toggleOnClick"
+            />
+
+
+        <ToggleButton
+            android:id="@+id/toggleNightMode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@drawable/check"
+            android:text="ToggleButton"
+            android:textOff=""
+            android:textOn=""
+            android:onClick="toggleOnClick"
+            />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:background="@drawable/button_border"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="4dp"
+            >
+
+            <Button
+                android:id="@+id/btnCacat"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="Tangan Cacat"
+                android:gravity="start"
+
+                android:onClick="toggleOnClick"
+                />
+
+
+            <ToggleButton
+                android:id="@+id/toggleCacat"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textOn=""
+                android:textOff=""
+                android:text="ToggleButton"
+                android:button="@drawable/check"
+                android:background="@null"
+
+                android:onClick="toggleOnClick"
+                />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnFeedback"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Feedback"
+            android:textAlignment="textStart"
+            android:background="@drawable/button_border"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:gravity="start" />
+
+        <Button
+            android:id="@+id/btnSetting"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Setting"
+            android:textAlignment="textStart"
+            android:background="@drawable/button_border"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:gravity="start" />
+
+
+    </LinearLayout>
+</FrameLayout>
