@@ -34,12 +34,12 @@ import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mTextMessage;
+
     EditText editTextInputSearchQuestion;
     HomePageFragment homePageFragment = new HomePageFragment();
     OwnProfileFragment ownProfileFragment = new OwnProfileFragment();
     MessageMainFragment messageMainFragment = new MessageMainFragment();
-    Button btnCategory;
+
     FragmentManager fm = getSupportFragmentManager();
     SharedPreferences mPrefs;
 
@@ -49,96 +49,66 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
         mPrefs = this.getSharedPreferences("myPreference",0);
 
-         if(mPrefs.getBoolean("NightMode", true)){
-             setNightMode();
-          }
-    }
+        if(mPrefs.getBoolean("NightMode", true)) setNightMode();
 
-    protected void mCallOwnDetails(View v){
-        Intent intent = new Intent(this, OwnDetailActivity.class);
-        this.startActivityForResult(intent, 1);
     }
 
     public void btnOnClick(View view) {
-        FragmentManager fm = getSupportFragmentManager();
-        QuestionFragment questionFragment = new QuestionFragment();
-        PictionaryFragment pictionaryFragment = new PictionaryFragment();
+        Intent intent = new Intent();
         switch (view.getId()){
-
-
-            case R.id.imgBtnMontlyPickup:
-                Intent intentPassMonthly = new Intent(this, QuestionBottomNavigation.class);
-                intentPassMonthly.putExtra("Monthly Pickup", "Monthly Pickup");
-                startActivity(intentPassMonthly);
-
+            case R.id.imgBtnMonthlyPickup:
+                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent.putExtra("Monthly Pickup", "Monthly Pickup");
                 break;
-
             case R.id.imgBtnDetective:
-                Intent intentPassDective = new Intent(this, QuestionBottomNavigation.class);
-                intentPassDective.putExtra("Detective", "Detective");
-                startActivity(intentPassDective);
-
+                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent.putExtra("Detective", "Detective");
                 break;
-
             case R.id.imgBtnLogic:
-                Intent intentPassLogic = new Intent(this, QuestionBottomNavigation.class);
-                intentPassLogic.putExtra("Logic", "Logic");
-                startActivity(intentPassLogic);
-
+                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent.putExtra("Logic", "Logic");
                 break;
 
             case R.id.imgBtnPictionary:
-                Intent intentPassPictionary = new Intent(this, QuestionBottomNavigation.class);
-                intentPassPictionary.putExtra("Pictionary", "Pictionary");
-                startActivity(intentPassPictionary);
-
+                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent.putExtra("Pictionary", "Pictionary");
                 break;
 
             case R.id.imgBtnGeneralKnowledge:
-                Intent intentPassGK = new Intent(this, QuestionBottomNavigation.class);
-                intentPassGK.putExtra("General Knowledge", "General Knowledge");
-                startActivity(intentPassGK);
-
+                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent.putExtra("General Knowledge", "General Knowledge");
                 break;
 
             case R.id.imgBtnMath:
-                Intent intentPassMath = new Intent(this, QuestionBottomNavigation.class);
-                intentPassMath.putExtra("Mathematics World", "Mathematics World");
-                startActivity(intentPassMath);
-
+                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent.putExtra("Mathematics World", "Mathematics World");
                 break;
 
             case R.id.imgBtnDecision:
-                Intent intentPassDecision = new Intent(this, OtherUserProfile.class);
-            //    intentPassDecision.putExtra("Decision Making", "Decision Making");
-                startActivity(intentPassDecision);
+                intent = new Intent(this, OtherUserProfile.class);
+                //intentPassDecision.putExtra("Decision Making", "Decision Making");
                 break;
         }
-    }
-
-    protected void directNews(){
-        Intent intentNews = new Intent(this, NewsBottomNavigation.class);
-        startActivityForResult(intentNews, 99);
+        startActivity(intent);
     }
 
     public void redirectQuestion(View view) {
         Intent intent = new Intent(this, MyQuestion.class);
         this.startActivity(intent);
     }
-    public void btnSearchOnQuestionClick(View v){
+
+    public void btnSearchOnQuestionClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Search Question");
 
         editTextInputSearchQuestion = new EditText(this);
         builder.setView(editTextInputSearchQuestion);
-
 
         builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
             @Override
@@ -155,55 +125,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final AlertDialog alertDialog = builder.create();
-
-
         alertDialog.show();
     }
 
     public void btnMsgOnClick(View v){
         switch(v.getId()){
-
             case R.id.btnComment:
                 break;
-
             case R.id.btnTag:
                 break;
-
             case R.id.btnLike:
                 break;
-
             case R.id.btnSystemMsg:
                 break;
-
-
         }
     }
 
     public void toggleOnClick(View v) {
-
-
         switch (v.getId()) {
-
             case R.id.toggleNightMode:
                 nightMode();
                 break;
-
             case R.id.btnNightMode:
                 nightMode();
                 break;
-
             case R.id.toggleCacat:
                 cacatMode();
                 break;
-
             case R.id.btnCacat:
                 cacatMode();
                 break;
-
-
         }
     }
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -225,6 +178,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+    protected void directNews(){
+        Intent intentNews = new Intent(this, NewsBottomNavigation.class);
+        startActivityForResult(intentNews, 99);
+    }
 
     protected void nightMode(){
         SharedPreferences settings = getSharedPreferences("myPreference",0);
@@ -245,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.apply();
     }
-
     protected void cacatMode(){
         SharedPreferences settings = getSharedPreferences("myPreference",0);
         SharedPreferences.Editor editor = settings.edit();
@@ -259,12 +215,11 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.commit();
     }
-
     protected void setNightMode(){
         LinearLayout mainHeader;
         ImageButton imgBtnBack, imgBtnSearch;
         TextView txtHeader;
-        ConstraintLayout container;
+        LinearLayout container;
 
         mainHeader = findViewById(R.id.mainHeader);
         mainHeader.setBackgroundColor(Color.BLACK);
@@ -278,13 +233,12 @@ public class MainActivity extends AppCompatActivity {
         container = findViewById(R.id.container);
         container.setBackgroundColor(Color.BLACK);
     }
-
     protected void cancelNightMode(){
         //setTheme(R.style.AppTheme);
         LinearLayout mainHeader;
         ImageButton imgBtnBack, imgBtnSearch;
         TextView txtHeader;
-        ConstraintLayout container;
+        LinearLayout container;
 
         mainHeader = findViewById(R.id.mainHeader);
         mainHeader.setBackgroundResource(R.color.colorAccent);
@@ -299,6 +253,12 @@ public class MainActivity extends AppCompatActivity {
         container.setBackgroundResource(R.color.lightgray);
     }
 
+    /*
+    protected void mCallOwnDetails(View v){
+        Intent intent = new Intent(this, OwnDetailActivity.class);
+        this.startActivityForResult(intent, 1);
+    }
+    */
 }
 
 

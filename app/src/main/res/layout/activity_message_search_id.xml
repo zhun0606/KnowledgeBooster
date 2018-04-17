@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.assignment.knowledgebooster.Message.MessageSearchIdActivity"
-    android:background="@color/lightgray"
-    >
+    android:background="@color/lightgray">
 
     <LinearLayout
         android:id="@+id/sendMsgTitle"

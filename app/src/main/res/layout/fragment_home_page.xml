@@ -10,108 +10,78 @@
         android:layout_marginStart="10dp"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/txtViewUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hot Topics"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <ImageButton
+                    style="@style/mainPageHotImageButton"
+                    android:onClick="btnOnClick" />
+                <ImageButton
+                    style="@style/mainPageHotImageButton"
+                    android:onClick="btnOnClick" />
+                <ImageButton
+                    style="@style/mainPageHotImageButton"
+                    android:onClick="btnOnClick" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="All Category" />
-
         <ImageButton
-                android:id="@+id/imgBtnMontlyPickup"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_monthly_pickup"
-                android:onClick="btnOnClick" />
-
+            android:id="@+id/imgBtnMonthlyPickup"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_monthly_pickup"
+            android:onClick="btnOnClick" />
         <ImageButton
-                android:id="@+id/imgBtnDetective"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_detective"
-                android:onClick="btnOnClick"
-                />
-
+            android:id="@+id/imgBtnDetective"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_detective"
+            android:onClick="btnOnClick" />
         <ImageButton
-                android:id="@+id/imgBtnLogic"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_logic"
-                android:onClick="btnOnClick"
-                />
-
+            android:id="@+id/imgBtnLogic"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_logic"
+            android:onClick="btnOnClick" />
         <ImageButton
-                android:id="@+id/imgBtnPictionary"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_pictionary"
-                android:onClick="btnOnClick"
-                />
-
+            android:id="@+id/imgBtnPictionary"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_pictionary"
+            android:onClick="btnOnClick" />
         <ImageButton
-                android:id="@+id/imgBtnGeneralKnowledge"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_general_knowledge"
-                android:onClick="btnOnClick"
-                />
-
+            android:id="@+id/imgBtnGeneralKnowledge"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_general_knowledge"
+            android:onClick="btnOnClick" />
         <ImageButton
-                android:id="@+id/imgBtnMath"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_math"
-                android:onClick="btnOnClick"
-                />
-
+            android:id="@+id/imgBtnMath"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_math"
+            android:onClick="btnOnClick" />
         <ImageButton
             android:id="@+id/imgBtnDecision"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button_border"
-            android:paddingBottom="2dp"
-            android:paddingTop="2dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/ic_decision"
-            android:onClick="btnOnClick" />
-
-        <ImageButton
-            android:id="@+id/imgBtsss"
             style="@style/mainPageImageButton"
             android:background="@drawable/button_border"
             android:src="@drawable/ic_decision"
