@@ -1,4 +1,4 @@
-package com.assignment.knowledgebooster.BottonNavigation;
+package com.assignment.knowledgebooster.main;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;

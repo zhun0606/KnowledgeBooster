@@ -1,15 +1,13 @@
-package com.assignment.knowledgebooster.BottonNavigation;
+package com.assignment.knowledgebooster.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,14 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.assignment.knowledgebooster.CreateQuestion.CreateQuestionActivity;
 import com.assignment.knowledgebooster.CreateQuestion.MyQuestion;
 import com.assignment.knowledgebooster.Message.MessageMainFragment;
 import com.assignment.knowledgebooster.OtherUserProfile.OtherUserProfile;
@@ -34,6 +30,8 @@ import com.assignment.knowledgebooster.OwnProfile.OwnProfileFragment;
 import com.assignment.knowledgebooster.Play.PictionaryFragment;
 import com.assignment.knowledgebooster.Play.QuestionFragment;
 import com.assignment.knowledgebooster.R;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
@@ -70,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         mTextMessage = (TextView) findViewById(R.id.message);

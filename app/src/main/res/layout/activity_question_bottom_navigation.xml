@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.assignment.knowledgebooster.BottonNavigation.QuestionBottomNavigation"
+    tools:context="com.assignment.knowledgebooster.main.QuestionBottomNavigation"
     android:background="@color/lightgray"
     >
 
