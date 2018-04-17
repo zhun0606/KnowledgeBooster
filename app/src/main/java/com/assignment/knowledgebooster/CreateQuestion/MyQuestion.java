@@ -27,9 +27,6 @@ public class MyQuestion extends AppCompatActivity {
     }
 
     protected void btnMyQuestionOnClick(View v){
-
-
-
         switch(v.getId()){
             case R.id.imgBtnBack:
                 finish();

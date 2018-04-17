@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
     <item
         android:id="@+id/follow_navigation"
         android:icon="@drawable/ic_back"
         android:title="Follow"
-        app:showAsAction="always|withText"
-        />
-
+        app:showAsAction="always|withText" />
 
     <item
         android:id="@+id/msg_navigation"
         android:icon="@drawable/ic_next"
         android:title="Message"
-        app:showAsAction="always|withText"
-        />
+        app:showAsAction="always|withText" />
 </menu>

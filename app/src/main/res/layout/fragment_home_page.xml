@@ -1,40 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.assignment.knowledgebooster.Play.HomePageFragment">
-    <ScrollView
+    android:scrollbarAlwaysDrawVerticalTrack="true">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="382dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <TextView
+        android:layout_height="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+        <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="All Category" />
 
-
-            <ImageButton
+        <ImageButton
                 android:id="@+id/imgBtnMontlyPickup"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -45,10 +26,9 @@
                 android:paddingTop="2dp"
                 android:scaleType="fitStart"
                 android:src="@drawable/ic_monthly_pickup"
-                android:onClick="btnOnClick"
-                />
+                android:onClick="btnOnClick" />
 
-            <ImageButton
+        <ImageButton
                 android:id="@+id/imgBtnDetective"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -62,7 +42,7 @@
                 android:onClick="btnOnClick"
                 />
 
-            <ImageButton
+        <ImageButton
                 android:id="@+id/imgBtnLogic"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -76,7 +56,7 @@
                 android:onClick="btnOnClick"
                 />
 
-            <ImageButton
+        <ImageButton
                 android:id="@+id/imgBtnPictionary"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -90,7 +70,7 @@
                 android:onClick="btnOnClick"
                 />
 
-            <ImageButton
+        <ImageButton
                 android:id="@+id/imgBtnGeneralKnowledge"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -104,7 +84,7 @@
                 android:onClick="btnOnClick"
                 />
 
-            <ImageButton
+        <ImageButton
                 android:id="@+id/imgBtnMath"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -118,21 +98,23 @@
                 android:onClick="btnOnClick"
                 />
 
-            <ImageButton
-                android:id="@+id/imgBtnDecision"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:paddingBottom="2dp"
-                android:paddingLeft="2dp"
-                android:paddingTop="2dp"
-                android:scaleType="fitStart"
-                android:src="@drawable/ic_decision"
-                android:onClick="btnOnClick"
-                />
+        <ImageButton
+            android:id="@+id/imgBtnDecision"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_border"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_decision"
+            android:onClick="btnOnClick" />
 
-        </LinearLayout>
-    </ScrollView>
-
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/imgBtsss"
+            style="@style/mainPageImageButton"
+            android:background="@drawable/button_border"
+            android:src="@drawable/ic_decision"
+            android:onClick="btnOnClick" />
+    </LinearLayout>
+</ScrollView>

@@ -42,28 +42,6 @@ public class MainActivity extends AppCompatActivity {
     Button btnCategory;
     FragmentManager fm = getSupportFragmentManager();
     SharedPreferences mPrefs;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
-                    return true;
-                case R.id.navigation_news:
-                    directNews();
-                    return true;
-                case R.id.navigation_message:
-                    fm.beginTransaction().replace(R.id.frameLayout, messageMainFragment).commit();
-                    return true;
-                case R.id.navigation_me:
-                    fm.beginTransaction().replace(R.id.frameLayout, ownProfileFragment).commit();
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,23 +53,18 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
         fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
         mPrefs = this.getSharedPreferences("myPreference",0);
 
-         if(mPrefs.getBoolean("NightMode", true) == true){
-
+         if(mPrefs.getBoolean("NightMode", true)){
              setNightMode();
           }
-
-
     }
 
     protected void mCallOwnDetails(View v){
         Intent intent = new Intent(this, OwnDetailActivity.class);
         this.startActivityForResult(intent, 1);
     }
-
 
     public void btnOnClick(View view) {
         FragmentManager fm = getSupportFragmentManager();
@@ -150,17 +123,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void redirectMyQuestion(View v){
-        Intent intent = new Intent(this, MyQuestion.class);
-        this.startActivity(intent);
-    }
-
     protected void directNews(){
         Intent intentNews = new Intent(this, NewsBottomNavigation.class);
         startActivityForResult(intentNews, 99);
     }
 
-    public void btnSearchOnQuestioClick(View v){
+    public void redirectQuestion(View view) {
+        Intent intent = new Intent(this, MyQuestion.class);
+        this.startActivity(intent);
+    }
+    public void btnSearchOnQuestionClick(View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Search Question");
 
@@ -233,70 +205,82 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-        protected void nightMode(){
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
+                    return true;
+                case R.id.navigation_news:
+                    directNews();
+                    return true;
+                case R.id.navigation_message:
+                    fm.beginTransaction().replace(R.id.frameLayout, messageMainFragment).commit();
+                    return true;
+                case R.id.navigation_me:
+                    fm.beginTransaction().replace(R.id.frameLayout, ownProfileFragment).commit();
+                    return true;
+            }
+            return false;
+        }
+    };
 
-            SharedPreferences settings = getSharedPreferences("myPreference",0);
+    protected void nightMode(){
+        SharedPreferences settings = getSharedPreferences("myPreference",0);
         SharedPreferences.Editor editor = settings.edit();
-
 
         ToggleButton toggleButtonNightMode = new ToggleButton(this);
         toggleButtonNightMode = findViewById(R.id.toggleNightMode);
 
         if(toggleButtonNightMode.isChecked()){
             editor.putBoolean("NightMode", true);
-                setNightMode();
+            setNightMode();
             fm.beginTransaction().detach(ownProfileFragment).attach(ownProfileFragment).commit();
-        }else{
+        }
+        else{
             editor.putBoolean("NightMode", false);
             cancelNightMode();
             fm.beginTransaction().detach(ownProfileFragment).attach(ownProfileFragment).commit();
-
         }
-
-        editor.commit();
+        editor.apply();
     }
 
     protected void cacatMode(){
-
         SharedPreferences settings = getSharedPreferences("myPreference",0);
         SharedPreferences.Editor editor = settings.edit();
-
 
         ToggleButton toggleButtonCacat = new ToggleButton(this);
         toggleButtonCacat = findViewById(R.id.toggleCacat);
         if(toggleButtonCacat.isChecked()){
             editor.putBoolean("CacatMode", true);
-
         }else{
             editor.putBoolean("CacatMode", false);
         }
-
         editor.commit();
-
     }
 
     protected void setNightMode(){
+        LinearLayout mainHeader;
+        ImageButton imgBtnBack, imgBtnSearch;
+        TextView txtHeader;
+        ConstraintLayout container;
 
-            LinearLayout mainHeader;
-            ImageButton imgBtnBack, imgBtnSearch;
-            TextView txtHeader;
-            ConstraintLayout container;
-
-            mainHeader = findViewById(R.id.mainHeader);
-            mainHeader.setBackgroundColor(Color.BLACK);
-            imgBtnBack = findViewById(R.id.imgBtnBack);
-            imgBtnBack.setBackgroundColor(Color.BLACK);
-            txtHeader = findViewById(R.id.txtHeader);
-            txtHeader.setBackgroundColor(Color.BLACK);
-            txtHeader.setTextColor(Color.WHITE);
-            imgBtnSearch = findViewById(R.id.imgBtnSearch);
-            imgBtnSearch.setBackgroundColor(Color.BLACK);
-            container = findViewById(R.id.container);
-            container.setBackgroundColor(Color.BLACK);
-
+        mainHeader = findViewById(R.id.mainHeader);
+        mainHeader.setBackgroundColor(Color.BLACK);
+        imgBtnBack = findViewById(R.id.imgBtnBack);
+        imgBtnBack.setBackgroundColor(Color.BLACK);
+        txtHeader = findViewById(R.id.txtHeader);
+        txtHeader.setBackgroundColor(Color.BLACK);
+        txtHeader.setTextColor(Color.WHITE);
+        imgBtnSearch = findViewById(R.id.imgBtnSearch);
+        imgBtnSearch.setBackgroundColor(Color.BLACK);
+        container = findViewById(R.id.container);
+        container.setBackgroundColor(Color.BLACK);
     }
 
     protected void cancelNightMode(){
+        //setTheme(R.style.AppTheme);
         LinearLayout mainHeader;
         ImageButton imgBtnBack, imgBtnSearch;
         TextView txtHeader;
@@ -315,8 +299,7 @@ public class MainActivity extends AppCompatActivity {
         container.setBackgroundResource(R.color.lightgray);
     }
 
-
-    }
+}
 
 
 
