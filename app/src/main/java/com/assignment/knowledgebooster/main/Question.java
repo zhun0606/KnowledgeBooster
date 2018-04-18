@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +51,7 @@ public class Question extends AppCompatActivity {
     Button btnCategory;
     BottomNavigationView navigation;
 
-    FragmentManager fm;
+    public FragmentManager fm = getSupportFragmentManager();
     QuestionSelectionFragment selectionFragment = new QuestionSelectionFragment();
     QuestionPictionaryFragment pictionaryFragment = new QuestionPictionaryFragment();
 
@@ -63,29 +66,29 @@ public class Question extends AppCompatActivity {
         navigation = findViewById(R.id.navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        fm = getSupportFragmentManager();
-
         retrieveQuestion();
+        checkQuestionTypeAndDisplay();
 
         setNightMode();
     }
 
-    protected  void checkQuestionTypeAndDisplay(){
+    public  void checkQuestionTypeAndDisplay(){
         try{
             Bundle extras = getIntent().getExtras();
             if(extras.getString("Monthly Pickup")  != null){
                 btnCategory.setText("Monthly Pickup");
+                extras.putString("text1","hello");
+                selectionFragment.setArguments(displayQuestionSelection());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
-                displayQuestionSelection();
             }
             else if(extras.getString("Detective") != null){
                 btnCategory.setText("Detective");
+                selectionFragment.setArguments(displayQuestionSelection());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
-                displayQuestionSelection();
             }
             else if(extras.getString("Logic") != null){
                 btnCategory.setText("Logic");
+                selectionFragment.setArguments(displayQuestionSelection());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Pictionary") != null){
@@ -94,14 +97,17 @@ public class Question extends AppCompatActivity {
             }
             else if(extras.getString("General Knowledge") != null){
                 btnCategory.setText("General Knowledge");
+                selectionFragment.setArguments(displayQuestionSelection());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Mathematics World") != null){
                 btnCategory.setText("Mathematics World");
+                selectionFragment.setArguments(displayQuestionSelection());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Decision Making") != null){
                 btnCategory.setText("Decision Making");
+                selectionFragment.setArguments(displayQuestionSelection());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
         }catch (NullPointerException ex){
@@ -112,7 +118,7 @@ public class Question extends AppCompatActivity {
     //////////////////////////////////////////////////////////////////////////////////////////////
     ////    Retrieving Question from FireBase and Removing Answered Question before Display   ////
     //////////////////////////////////////////////////////////////////////////////////////////////
-    protected void retrieveQuestion() {
+    public void retrieveQuestion() {
         DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
         databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -123,14 +129,13 @@ public class Question extends AppCompatActivity {
                 while (questions.getSelections().remove(null));
                 retrieveAnsweredQuestion();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-    protected void retrieveAnsweredQuestion() {
+    public void retrieveAnsweredQuestion() {
         DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
         databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -147,7 +152,7 @@ public class Question extends AppCompatActivity {
             }
         });
     }
-    protected void removeAnsweredQuestion(){
+    public void removeAnsweredQuestion(){
         ArrayList<Pictionary> questionPictionaryToBeRemove = new ArrayList<>();
         ArrayList<Selection> questionSelectionToBeRemove = new ArrayList<>();
         ArrayList<Scramble> questionScrambleToBeRemove = new ArrayList<>();
@@ -190,56 +195,15 @@ public class Question extends AppCompatActivity {
         checkQuestionTypeAndDisplay();
     }
 
-    protected void displayQuestionScramble(){}
-    protected void displayQuestionPictionary(){}
-    protected void displayQuestionSelection(){
+    public void displayQuestionScramble(){}
+    public void displayQuestionPictionary(){}
+    public Selection displayQuestionSelection(){
         ArrayList<Selection> selectionQuestion = questions.getSelections();
         // shuffle the question
         Collections.shuffle(selectionQuestion);
-        //get first question
-        Selection ques = selectionQuestion.get(0);
-        ArrayList<String> answ = new ArrayList<>();
-
-        if(ques.getFake2() == "no" && ques.getFake3() == "no"){
-            answ.add(ques.getAnswer());
-            answ.add(ques.getFake1());
-            Collections.shuffle(answ);
-
-            selectionFragment.txtQuestion.setText(ques.getQuestion());
-            selectionFragment.btnA.setText(answ.get(0));
-            selectionFragment.btnB.setText(answ.get(1));
-            selectionFragment.btnC.setVisibility(View.INVISIBLE);
-            selectionFragment.btnD.setVisibility(View.INVISIBLE);
-        }
-        if(ques.getFake3() == "no"){
-            answ.add(ques.getAnswer());
-            answ.add(ques.getFake1());
-            answ.add(ques.getFake2());
-            Collections.shuffle(answ);
-
-            selectionFragment.txtQuestion.setText(ques.getQuestion());
-            selectionFragment.btnA.setText(answ.get(0));
-            selectionFragment.btnB.setText(answ.get(1));
-            selectionFragment.btnC.setText(answ.get(2));
-            selectionFragment.btnD.setVisibility(View.INVISIBLE);
-        }else {
-            answ.add(ques.getAnswer());
-            answ.add(ques.getFake1());
-            answ.add(ques.getFake2());
-            answ.add(ques.getFake3());
-            Collections.shuffle(answ);
-
-            selectionFragment.txtQuestion.setText(ques.getQuestion());
-            selectionFragment.btnA.setText(answ.get(0));
-            selectionFragment.btnB.setText(answ.get(1));
-            selectionFragment.btnC.setText(answ.get(2));
-            selectionFragment.btnD.setText(answ.get(3));
-        }
+        //return first question
+        return selectionQuestion.get(0);
     }
-
-
-
-    
 
     public void btnSearchOnQuestionClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

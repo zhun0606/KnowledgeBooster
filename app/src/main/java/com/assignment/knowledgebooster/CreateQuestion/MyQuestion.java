@@ -3,7 +3,6 @@ package com.assignment.knowledgebooster.CreateQuestion;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.assignment.knowledgebooster.CreateQuestion.CreateQuestionActivity;
 import com.assignment.knowledgebooster.R;
 
 public class MyQuestion extends AppCompatActivity {
@@ -32,7 +30,7 @@ public class MyQuestion extends AppCompatActivity {
                 finish();
                 break;
             case R.id.imgBtnCreateQuestion:
-                Intent intent = new Intent(this,CreateQuestionActivity.class);
+                Intent intent = new Intent(this,CreateQuestion.class);
                 startActivity(intent);
                 break;
             case R.id.imgBtnExamineQuestion:
@@ -48,7 +46,7 @@ public class MyQuestion extends AppCompatActivity {
         mPrefs = this.getSharedPreferences("myPreference", 0);
 
         if(mPrefs.getBoolean("NightMode", true) == true){
-            ConstraintLayout container;
+            LinearLayout container;
             LinearLayout myQuestionLinearLayout, myQuestionLinearLayout2;
             ImageButton imgBtnBack, imgBtnCreateQuestion, imgBtnExamineQuestion, imgBtnMyContribution;
             TextView txtViewMyQuestionHeader, spacing;

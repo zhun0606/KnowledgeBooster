@@ -8,6 +8,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.assignment.knowledgebooster.FirebaseClass.QuestionAnswered;
 import com.assignment.knowledgebooster.FirebaseClass.User;
 import com.assignment.knowledgebooster.main.MainActivity;
 import com.crashlytics.android.answers.Answers;
@@ -44,7 +45,7 @@ public class LauncherActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //if the user is signed in, launch homepage, else launch the sign in (AuthUI) Activity
         if (auth.getCurrentUser() != null) {
-            createUserAccount();
+            createUserAccount();createUserAnsweredQuestion();
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();
@@ -120,6 +121,23 @@ public class LauncherActivity extends AppCompatActivity {
                     String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     String email = FirebaseAuth.getInstance().getCurrentUser().getEmail().toLowerCase();
                     User user = new User(user_id,name,email,0,0);
+                    databaseReference.setValue(user);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void createUserAnsweredQuestion() {
+        final String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("questionAnswered").child(user_id);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    QuestionAnswered user = new QuestionAnswered();
                     databaseReference.setValue(user);
                 }
             }

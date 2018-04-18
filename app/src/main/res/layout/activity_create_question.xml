@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <LinearLayout
         android:id="@+id/createQuestionLinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
         android:orientation="horizontal">
         <ImageButton
             android:id="@+id/btnRevert"
@@ -24,18 +24,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:background="@color/colorAccent"
             android:gravity="center_horizontal|center_vertical"
             android:text="CREATE QUESTION"/>
         <Button
-            android:id="@+id/btnCreate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:background="@color/colorAccent"
-            android:onClick="btnDoneCreateQuestion"
             android:textColor="@color/colorWhite"
-            android:text="CREATE"/>
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <LinearLayout
@@ -43,135 +40,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnQuestionCategory1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorWhite"
-                android:gravity="center|start"
-                android:onClick="btnQuestionCategoryOnClick"
-                android:text="Question Category" />
-
-            <Button
-                android:id="@+id/btnQuestionCategory2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorWhite"
-                android:gravity="center|end"
-                android:onClick="btnQuestionCategoryOnClick" />
-
-        </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/questionTypeLinearLayout2"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <Button
-                android:id="@+id/btnQuestionContent1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorWhite"
-                android:gravity="center|start"
-                android:onClick="directSetQuestion"
-                android:text="Question context" />
-
-            <ImageButton
-                android:id="@+id/btnQuestionContent2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@color/colorWhite"
-                android:gravity="center|end"
-                android:onClick="directSetQuestion"
-                android:tag="null" />
-
-
-        </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/questionTypeLinearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <Button
-                android:id="@+id/btnQuestionExplanation1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorWhite"
-                android:gravity="center|start"
-                android:onClick="setExplanation"
-                android:text="Question Category" />
-
-
-            <ImageButton
-                android:id="@+id/btnQuestionExplanation2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:background="@color/colorWhite"
-                android:gravity="center|end"
-                android:onClick="setExplanation"
-                android:tag="null" />
-        </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/termsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="20dp"
-            >
-
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <TextView
-                android:id="@+id/txtMust"
-                android:text="Must Know: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:textSize="20dp"
+                android:text="Question Category"/>
+            <Button
+                android:id="@+id/btnQuestionCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:gravity="center"
+                android:text="Click To Change"
+                android:onClick="btnQuestionCategoryOnClick" />
+        </LinearLayout>
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/txtViewMstKnow1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="1. All questions will went under quality check before it will be posted."
-                />
+    <FrameLayout
+        android:id="@+id/frameLayoutCreateQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </FrameLayout>
 
-            <TextView
-                android:id="@+id/txtViewMstKnow2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="2. Please credit the original author."
-                />
-
-            <TextView
-                android:id="@+id/txtViewMstKnow3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="3. Knowledge Booster has the right to share any question"
-                />
+    <LinearLayout
+        android:id="@+id/termsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/txtMust"
+            android:text="Must Know: "
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. All questions will went under quality check before it will be posted." />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Please credit the original author." />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Knowledge Booster has the right to share any question" />
         </LinearLayout>
 </LinearLayout>
