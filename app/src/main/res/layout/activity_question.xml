@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <LinearLayout
-        android:id="@+id/newsBottomHeader"
+        android:id="@+id/mainHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
@@ -17,9 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorAccent"
-            app:srcCompat="@android:drawable/ic_menu_revert"
-            android:onClick="imgBtnNewsBackOnClick" />
+            android:background="@null"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
         <Button
             android:id="@+id/btnCategory"
             android:layout_width="wrap_content"
@@ -38,7 +37,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/newsFrameLayout"
+        android:id="@+id/questionFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
@@ -48,5 +47,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/news_navigation" />
+        app:menu="@menu/question_navigation" />
 </LinearLayout>

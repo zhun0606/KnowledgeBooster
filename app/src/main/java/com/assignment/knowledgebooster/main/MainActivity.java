@@ -21,6 +21,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.assignment.knowledgebooster.CreateQuestion.MyQuestion;
+import com.assignment.knowledgebooster.FirebaseClass.QuestionAnswered;
 import com.assignment.knowledgebooster.FirebaseClass.Questions;
 import com.assignment.knowledgebooster.Fragment.NewsFragment;
 import com.assignment.knowledgebooster.Fragment.MessageMainFragment;
@@ -29,6 +30,7 @@ import com.assignment.knowledgebooster.Fragment.HomePageFragment;
 import com.assignment.knowledgebooster.Fragment.OwnProfileFragment;
 import com.assignment.knowledgebooster.R;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,8 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
-    Questions questions;
-    ImageButton imgBtnQuestion,imgBtnSearch;
+    ImageButton imgBtnQuestion, imgBtnSearch;
     TextView txtHeader;
     EditText editTextInputSearchQuestion;
     BottomNavigationView navigation;
@@ -72,39 +73,37 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
-        mPrefs = this.getSharedPreferences("myPreference",0);
-
-        retrieveQuestion();
+        mPrefs = this.getSharedPreferences("myPreference", 0);
     }
 
     public void btnOnClick(View view) {
         Intent intent = new Intent();
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.imgBtnMonthlyPickup:
-                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent = new Intent(this, Question.class);
                 intent.putExtra("Monthly Pickup", "Monthly Pickup");
                 break;
             case R.id.imgBtnDetective:
-                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent = new Intent(this, Question.class);
                 intent.putExtra("Detective", "Detective");
                 break;
             case R.id.imgBtnLogic:
-                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent = new Intent(this, Question.class);
                 intent.putExtra("Logic", "Logic");
                 break;
 
             case R.id.imgBtnPictionary:
-                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent = new Intent(this, Question.class);
                 intent.putExtra("Pictionary", "Pictionary");
                 break;
 
             case R.id.imgBtnGeneralKnowledge:
-                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent = new Intent(this, Question.class);
                 intent.putExtra("General Knowledge", "General Knowledge");
                 break;
 
             case R.id.imgBtnMath:
-                intent = new Intent(this, QuestionBottomNavigation.class);
+                intent = new Intent(this, Question.class);
                 intent.putExtra("Mathematics World", "Mathematics World");
                 break;
 
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    public void btnSearchOnQuestionClick(View view){
+    public void btnSearchOnQuestionClick(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Search Question");
 
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "Direct to question ID", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Direct to question ID", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -146,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void btnMsgOnClick(View v){
-        switch(v.getId()){
+    public void btnMsgOnClick(View v) {
+        switch (v.getId()) {
             case R.id.btnComment:
                 break;
             case R.id.btnTag:
@@ -212,33 +211,35 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
-    protected void directNews(){
+
+    protected void directNews() {
         Intent intentNews = new Intent(this, News.class);
         startActivityForResult(intentNews, 99);
     }
-    protected void cacatMode(){
-        SharedPreferences settings = getSharedPreferences("myPreference",0);
+
+    protected void cacatMode() {
+        SharedPreferences settings = getSharedPreferences("myPreference", 0);
         SharedPreferences.Editor editor = settings.edit();
-        ToggleButton toggleButtonCacat =  findViewById(R.id.toggleCacat);
-        if(toggleButtonCacat.isChecked()){
+        ToggleButton toggleButtonCacat = findViewById(R.id.toggleCacat);
+        if (toggleButtonCacat.isChecked()) {
             editor.putBoolean("CacatMode", true);
-        }else{
+        } else {
             editor.putBoolean("CacatMode", false);
         }
         editor.commit();
     }
-    protected void nightMode(){
-        SharedPreferences settings = getSharedPreferences("myPreference",0);
+
+    protected void nightMode() {
+        SharedPreferences settings = getSharedPreferences("myPreference", 0);
         SharedPreferences.Editor editor = settings.edit();
 
         ToggleButton toggleButtonNightMode = findViewById(R.id.toggleNightMode);
 
-        if(toggleButtonNightMode.isChecked()){
+        if (toggleButtonNightMode.isChecked()) {
             editor.putBoolean("NightMode", true);
             setNightMode();
             fm.beginTransaction().detach(ownProfileFragment).attach(ownProfileFragment).commit();
-        }
-        else{
+        } else {
             editor.putBoolean("NightMode", false);
             cancelNightMode();
             fm.beginTransaction().detach(ownProfileFragment).attach(ownProfileFragment).commit();
@@ -246,12 +247,11 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    public void setNightMode(){
+    public void setNightMode() {
         LinearLayout mainHeader = findViewById(R.id.mainHeader);
-        ImageButton imgBtnQuestion  = findViewById(R.id.imgBtnQuestion)
-                , imgBtnSearch  = findViewById(R.id.imgBtnSearch);
-        TextView txtHeader      = findViewById(R.id.txtHeader);
-        LinearLayout container  = findViewById(R.id.container);
+        ImageButton imgBtnQuestion = findViewById(R.id.imgBtnQuestion), imgBtnSearch = findViewById(R.id.imgBtnSearch);
+        TextView txtHeader = findViewById(R.id.txtHeader);
+        LinearLayout container = findViewById(R.id.container);
 
         mainHeader.setBackgroundColor(Color.BLACK);
         imgBtnQuestion.setBackgroundColor(Color.BLACK);
@@ -260,14 +260,13 @@ public class MainActivity extends AppCompatActivity {
         imgBtnSearch.setBackgroundColor(Color.BLACK);
         container.setBackgroundColor(Color.BLACK);
     }
-    protected void cancelNightMode(){
+
+    protected void cancelNightMode() {
         setTheme(R.style.AppTheme);
 
-        LinearLayout mainHeader = findViewById(R.id.mainHeader)
-                   , container  = findViewById(R.id.container);
-        ImageButton imgBtnQuestion  = findViewById(R.id.imgBtnQuestion)
-                , imgBtnSearch  = findViewById(R.id.imgBtnSearch);
-        TextView txtHeader      = findViewById(R.id.txtHeader);
+        LinearLayout mainHeader = findViewById(R.id.mainHeader), container = findViewById(R.id.container);
+        ImageButton imgBtnQuestion = findViewById(R.id.imgBtnQuestion), imgBtnSearch = findViewById(R.id.imgBtnSearch);
+        TextView txtHeader = findViewById(R.id.txtHeader);
 
         mainHeader.setBackgroundResource(R.color.colorAccent);
         txtHeader.setBackgroundColor(Color.TRANSPARENT);
@@ -278,33 +277,10 @@ public class MainActivity extends AppCompatActivity {
         container.setBackgroundResource(R.color.lightgray);
     }
 
-    protected void retrieveQuestion(){
-        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference().child("questions");
-        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                questions = dataSnapshot.getValue(Questions.class);
-                if(questions == null){
-                    Toast.makeText(getApplicationContext(), "Purchases Empty ! Please Purchase An Item First Before Proceed.", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Questions Retrieved Successfully.", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     /*
     protected void mCallOwnDetails(View v){
         Intent intent = new Intent(this, OwnDetailActivity.class);
         this.startActivityForResult(intent, 1);
     }
     */
-
 }
-
-
-

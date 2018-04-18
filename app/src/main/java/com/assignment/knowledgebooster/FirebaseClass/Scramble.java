@@ -1,6 +1,7 @@
 package com.assignment.knowledgebooster.FirebaseClass;
 
 public class Scramble {
+    private String questionId;
     private String question;
     private String author;
     private int totalAnswers;
@@ -9,11 +10,20 @@ public class Scramble {
     public Scramble() {
     }
 
-    public Scramble(String question, String author, int totalAnswers, int correctAnswer) {
+    public Scramble(String questionId, String question, String author, int totalAnswers, int correctAnswer) {
+        this.questionId = questionId;
         this.question = question;
         this.author = author;
         this.totalAnswers = totalAnswers;
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 
     public String getQuestion() {
@@ -51,7 +61,8 @@ public class Scramble {
     @Override
     public String toString() {
         return "Scramble{" +
-                "question='" + question + '\'' +
+                "questionId='" + questionId + '\'' +
+                ", question='" + question + '\'' +
                 ", author='" + author + '\'' +
                 ", totalAnswers=" + totalAnswers +
                 ", correctAnswer=" + correctAnswer +

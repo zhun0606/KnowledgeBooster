@@ -28,7 +28,7 @@
             android:name=".main.MainActivity"
             android:label="@string/title_activity_main"/>
         <activity
-            android:name=".main.QuestionBottomNavigation"
+            android:name=".main.Question"
             android:label="@string/title_activity_question_bottom_navigation" />
         <activity android:name=".CreateQuestion.MyQuestion" />
         <activity android:name=".CreateQuestion.CreateQuestionActivity" />

@@ -343,14 +343,13 @@ public class CreateQuestionActivity extends AppCompatActivity implements View.On
 
         if(mPrefs.getBoolean("NightMode", true) == true){
 
-            ConstraintLayout container;
-            LinearLayout createQuestionMainLayout, createQuestionLinearLayout1, questionTypeLinearLayout, questionTypeLinearLayout2, questionTypeLinearLayout3,termsLayout;
+            LinearLayout container;
+            LinearLayout createQuestionLinearLayout1, questionTypeLinearLayout, questionTypeLinearLayout2, questionTypeLinearLayout3,termsLayout;
             ImageButton btnRevert, btnQuestionContent2, btnQuestionExplanation2;
             TextView txtViewMyQuestionHeader, txtMust, txtViewMstKnow1, txtViewMstKnow2, txtViewMstKnow3;
             Button btnCreate, btnQuestionCategory1, btnQuestionCategory2, btnQuestionContent1, btnQuestionExplanation1;
 
             container = findViewById(R.id.container);
-            createQuestionMainLayout = findViewById(R.id.createQuestionMainLayout);
             createQuestionLinearLayout1 = findViewById(R.id.createQuestionLinearLayout1);
             questionTypeLinearLayout = findViewById(R.id.questionTypeLinearLayout);
             questionTypeLinearLayout2 = findViewById(R.id.questionTypeLinearLayout2);
@@ -370,7 +369,6 @@ public class CreateQuestionActivity extends AppCompatActivity implements View.On
             btnQuestionExplanation2 = findViewById(R.id.btnQuestionExplanation2);
 
             container.setBackgroundColor(Color.BLACK);
-            createQuestionMainLayout.setBackgroundColor(Color.BLACK);
             createQuestionLinearLayout1.setBackgroundColor(Color.BLACK);
             questionTypeLinearLayout.setBackgroundColor(Color.BLACK);
             questionTypeLinearLayout2.setBackgroundColor(Color.BLACK);
@@ -399,10 +397,6 @@ public class CreateQuestionActivity extends AppCompatActivity implements View.On
             btnQuestionExplanation1.setTextColor(Color.WHITE);
             btnQuestionExplanation2.setBackgroundColor(Color.BLACK);
         }
-
-
-
-
     }
 
 }

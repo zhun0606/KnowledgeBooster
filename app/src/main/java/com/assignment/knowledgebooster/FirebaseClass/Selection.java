@@ -1,6 +1,7 @@
 package com.assignment.knowledgebooster.FirebaseClass;
 
 public class Selection {
+    private String questionId;
     private String question;
     private String answer;
     private String fake1;
@@ -10,10 +11,10 @@ public class Selection {
     private int totalAnswer;
     private int correctAnswer;
 
-    public Selection() {
-    }
+    public Selection() { }
 
-    public Selection(String question, String answer, String fake1, String fake2, String fake3, String author, int totalAnswer, int correctAnswer) {
+    public Selection(String questionId, String question, String answer, String fake1, String fake2, String fake3, String author, int totalAnswer, int correctAnswer) {
+        this.questionId = questionId;
         this.question = question;
         this.answer = answer;
         this.fake1 = fake1;
@@ -22,6 +23,14 @@ public class Selection {
         this.author = author;
         this.totalAnswer = totalAnswer;
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 
     public String getQuestion() {
@@ -91,7 +100,8 @@ public class Selection {
     @Override
     public String toString() {
         return "Selection{" +
-                "question='" + question + '\'' +
+                "questionId='" + questionId + '\'' +
+                ", question='" + question + '\'' +
                 ", answer='" + answer + '\'' +
                 ", fake1='" + fake1 + '\'' +
                 ", fake2='" + fake2 + '\'' +

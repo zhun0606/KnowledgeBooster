@@ -1,6 +1,7 @@
 package com.assignment.knowledgebooster.FirebaseClass;
 
 public class Pictionary {
+    private String questionId;
     private String picUrl;
     private String author;
     private int totalAnswers;
@@ -8,11 +9,20 @@ public class Pictionary {
 
     public Pictionary(){    }
 
-    public Pictionary(String picUrl, String author, int totalAnswers, int correctAnswer) {
+    public Pictionary(String questionId, String picUrl, String author, int totalAnswers, int correctAnswer) {
+        this.questionId = questionId;
         this.picUrl = picUrl;
         this.author = author;
         this.totalAnswers = totalAnswers;
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 
     public String getPicUrl() {
@@ -50,7 +60,8 @@ public class Pictionary {
     @Override
     public String toString() {
         return "Pictionary{" +
-                "picUrl='" + picUrl + '\'' +
+                "questionId='" + questionId + '\'' +
+                ", picUrl='" + picUrl + '\'' +
                 ", author='" + author + '\'' +
                 ", totalAnswers=" + totalAnswers +
                 ", correctAnswer=" + correctAnswer +
