@@ -78,4 +78,7 @@ public class QuestionSelectionFragment extends Fragment {
             btnD.setText(answ.get(3));
         }
     }
+    protected void answeringQuestion(View v){
+
+    }
 }

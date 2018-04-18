@@ -22,7 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -45,7 +47,7 @@ public class LauncherActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //if the user is signed in, launch homepage, else launch the sign in (AuthUI) Activity
         if (auth.getCurrentUser() != null) {
-            createUserAccount();createUserAnsweredQuestion();
+            createUserAccount();
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();
@@ -57,7 +59,6 @@ public class LauncherActivity extends AppCompatActivity {
     public void signIn() {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
-                        //.setTheme(R.style.BlackBackground)
                         .setLogo(R.drawable.logo)
                         .setAvailableProviders(
                                 Arrays.asList(
@@ -122,7 +123,7 @@ public class LauncherActivity extends AppCompatActivity {
                     String email = FirebaseAuth.getInstance().getCurrentUser().getEmail().toLowerCase();
                     User user = new User(user_id,name,email,0,0);
                     databaseReference.setValue(user);
-                }
+                }createUserAnsweredQuestion();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -137,7 +138,12 @@ public class LauncherActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
+                    List<String> str = new ArrayList<>();
+                    str.add("0");
                     QuestionAnswered user = new QuestionAnswered();
+                    user.setPictionaries(str);
+                    user.setScrambles(str);
+                    user.setSelections(str);
                     databaseReference.setValue(user);
                 }
             }
