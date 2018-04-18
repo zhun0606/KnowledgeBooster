@@ -6,14 +6,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,23 +21,33 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.assignment.knowledgebooster.CreateQuestion.MyQuestion;
-import com.assignment.knowledgebooster.Message.MessageMainFragment;
-import com.assignment.knowledgebooster.OtherUserProfile.OtherUserProfile;
-import com.assignment.knowledgebooster.Play.HomePageFragment;
-import com.assignment.knowledgebooster.OwnProfile.OwnDetailActivity;
-import com.assignment.knowledgebooster.OwnProfile.OwnProfileFragment;
-import com.assignment.knowledgebooster.Play.PictionaryFragment;
-import com.assignment.knowledgebooster.Play.QuestionFragment;
+import com.assignment.knowledgebooster.FirebaseClass.Questions;
+import com.assignment.knowledgebooster.Fragment.NewsFragment;
+import com.assignment.knowledgebooster.Fragment.MessageMainFragment;
+import com.assignment.knowledgebooster.OtherUserProfile;
+import com.assignment.knowledgebooster.Fragment.HomePageFragment;
+import com.assignment.knowledgebooster.Fragment.OwnProfileFragment;
 import com.assignment.knowledgebooster.R;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
-
+    Questions questions;
+    ImageButton imgBtnQuestion,imgBtnSearch;
+    TextView txtHeader;
     EditText editTextInputSearchQuestion;
-    HomePageFragment homePageFragment = new HomePageFragment();
-    OwnProfileFragment ownProfileFragment = new OwnProfileFragment();
-    MessageMainFragment messageMainFragment = new MessageMainFragment();
+    BottomNavigationView navigation;
+    LinearLayout mainHeader;
+    HomePageFragment homePageFragment;
+    NewsFragment newsFragment;
+    OwnProfileFragment ownProfileFragment;
+    MessageMainFragment messageMainFragment;
 
     FragmentManager fm = getSupportFragmentManager();
     SharedPreferences mPrefs;
@@ -49,14 +58,23 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        imgBtnQuestion = findViewById(R.id.imgBtnQuestion);
+        imgBtnSearch = findViewById(R.id.imgBtnSearch);
+        txtHeader = findViewById(R.id.txtHeader);
+        navigation = findViewById(R.id.navigation);
+        mainHeader = findViewById(R.id.mainHeader);
+
+        homePageFragment = new HomePageFragment();
+        newsFragment = new NewsFragment();
+        ownProfileFragment = new OwnProfileFragment();
+        messageMainFragment = new MessageMainFragment();
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
         mPrefs = this.getSharedPreferences("myPreference",0);
 
-        if(mPrefs.getBoolean("NightMode", true)) setNightMode();
-
+        retrieveQuestion();
     }
 
     public void btnOnClick(View view) {
@@ -161,34 +179,59 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            ViewGroup.LayoutParams params = mainHeader.getLayoutParams();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    mainHeader.setVisibility(View.VISIBLE);
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    imgBtnQuestion.setVisibility(View.VISIBLE);
+                    imgBtnSearch.setVisibility(View.VISIBLE);
+                    txtHeader.setText("Question Bank");
                     fm.beginTransaction().replace(R.id.frameLayout, homePageFragment).commit();
                     return true;
                 case R.id.navigation_news:
-                    directNews();
+                    mainHeader.setVisibility(View.VISIBLE);
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    imgBtnQuestion.setVisibility(View.INVISIBLE);
+                    imgBtnSearch.setVisibility(View.INVISIBLE);
+                    txtHeader.setText("News");
+                    fm.beginTransaction().replace(R.id.frameLayout, newsFragment).commit();
                     return true;
                 case R.id.navigation_message:
+                    mainHeader.setVisibility(View.INVISIBLE);
+                    params.height = 0;
                     fm.beginTransaction().replace(R.id.frameLayout, messageMainFragment).commit();
                     return true;
                 case R.id.navigation_me:
+                    mainHeader.setVisibility(View.INVISIBLE);
+                    params.height = 0;
                     fm.beginTransaction().replace(R.id.frameLayout, ownProfileFragment).commit();
                     return true;
             }
+            mainHeader.setLayoutParams(params);
             return false;
         }
     };
     protected void directNews(){
-        Intent intentNews = new Intent(this, NewsBottomNavigation.class);
+        Intent intentNews = new Intent(this, News.class);
         startActivityForResult(intentNews, 99);
     }
-
+    protected void cacatMode(){
+        SharedPreferences settings = getSharedPreferences("myPreference",0);
+        SharedPreferences.Editor editor = settings.edit();
+        ToggleButton toggleButtonCacat =  findViewById(R.id.toggleCacat);
+        if(toggleButtonCacat.isChecked()){
+            editor.putBoolean("CacatMode", true);
+        }else{
+            editor.putBoolean("CacatMode", false);
+        }
+        editor.commit();
+    }
     protected void nightMode(){
         SharedPreferences settings = getSharedPreferences("myPreference",0);
         SharedPreferences.Editor editor = settings.edit();
 
-        ToggleButton toggleButtonNightMode = new ToggleButton(this);
-        toggleButtonNightMode = findViewById(R.id.toggleNightMode);
+        ToggleButton toggleButtonNightMode = findViewById(R.id.toggleNightMode);
 
         if(toggleButtonNightMode.isChecked()){
             editor.putBoolean("NightMode", true);
@@ -202,55 +245,56 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.apply();
     }
-    protected void cacatMode(){
-        SharedPreferences settings = getSharedPreferences("myPreference",0);
-        SharedPreferences.Editor editor = settings.edit();
 
-        ToggleButton toggleButtonCacat = new ToggleButton(this);
-        toggleButtonCacat = findViewById(R.id.toggleCacat);
-        if(toggleButtonCacat.isChecked()){
-            editor.putBoolean("CacatMode", true);
-        }else{
-            editor.putBoolean("CacatMode", false);
-        }
-        editor.commit();
-    }
-    protected void setNightMode(){
-        LinearLayout mainHeader;
-        ImageButton imgBtnBack, imgBtnSearch;
-        TextView txtHeader;
-        LinearLayout container;
+    public void setNightMode(){
+        LinearLayout mainHeader = findViewById(R.id.mainHeader);
+        ImageButton imgBtnQuestion  = findViewById(R.id.imgBtnQuestion)
+                , imgBtnSearch  = findViewById(R.id.imgBtnSearch);
+        TextView txtHeader      = findViewById(R.id.txtHeader);
+        LinearLayout container  = findViewById(R.id.container);
 
-        mainHeader = findViewById(R.id.mainHeader);
         mainHeader.setBackgroundColor(Color.BLACK);
-        imgBtnBack = findViewById(R.id.imgBtnBack);
-        imgBtnBack.setBackgroundColor(Color.BLACK);
-        txtHeader = findViewById(R.id.txtHeader);
+        imgBtnQuestion.setBackgroundColor(Color.BLACK);
         txtHeader.setBackgroundColor(Color.BLACK);
         txtHeader.setTextColor(Color.WHITE);
-        imgBtnSearch = findViewById(R.id.imgBtnSearch);
         imgBtnSearch.setBackgroundColor(Color.BLACK);
-        container = findViewById(R.id.container);
         container.setBackgroundColor(Color.BLACK);
     }
     protected void cancelNightMode(){
-        //setTheme(R.style.AppTheme);
-        LinearLayout mainHeader;
-        ImageButton imgBtnBack, imgBtnSearch;
-        TextView txtHeader;
-        LinearLayout container;
+        setTheme(R.style.AppTheme);
 
-        mainHeader = findViewById(R.id.mainHeader);
+        LinearLayout mainHeader = findViewById(R.id.mainHeader)
+                   , container  = findViewById(R.id.container);
+        ImageButton imgBtnQuestion  = findViewById(R.id.imgBtnQuestion)
+                , imgBtnSearch  = findViewById(R.id.imgBtnSearch);
+        TextView txtHeader      = findViewById(R.id.txtHeader);
+
         mainHeader.setBackgroundResource(R.color.colorAccent);
-        imgBtnBack = findViewById(R.id.imgBtnBack);
-        imgBtnBack.setBackgroundColor(Color.TRANSPARENT);
-        txtHeader = findViewById(R.id.txtHeader);
         txtHeader.setBackgroundColor(Color.TRANSPARENT);
         txtHeader.setTextColor(Color.BLACK);
-        imgBtnSearch = findViewById(R.id.imgBtnSearch);
+
+        imgBtnQuestion.setBackgroundColor(Color.TRANSPARENT);
         imgBtnSearch.setBackgroundColor(Color.TRANSPARENT);
-        container = findViewById(R.id.container);
         container.setBackgroundResource(R.color.lightgray);
+    }
+
+    protected void retrieveQuestion(){
+        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference().child("questions");
+        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                questions = dataSnapshot.getValue(Questions.class);
+                if(questions == null){
+                    Toast.makeText(getApplicationContext(), "Purchases Empty ! Please Purchase An Item First Before Proceed.", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Questions Retrieved Successfully.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /*
@@ -259,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
         this.startActivityForResult(intent, 1);
     }
     */
+
 }
 
 

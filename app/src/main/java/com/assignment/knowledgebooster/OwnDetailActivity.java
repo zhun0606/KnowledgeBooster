@@ -1,4 +1,4 @@
-package com.assignment.knowledgebooster.OwnProfile;
+package com.assignment.knowledgebooster;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;

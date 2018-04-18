@@ -20,8 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.assignment.knowledgebooster.Play.PictionaryFragment;
-import com.assignment.knowledgebooster.Play.QuestionFragment;
+import com.assignment.knowledgebooster.Fragment.PictionaryFragment;
+import com.assignment.knowledgebooster.Fragment.QuestionFragment;
 import com.assignment.knowledgebooster.R;
 
 public class QuestionBottomNavigation extends AppCompatActivity {

@@ -16,13 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.assignment.knowledgebooster.News.NewsFragment;
+import com.assignment.knowledgebooster.Fragment.NewsFragment;
 import com.assignment.knowledgebooster.News.NewsResultFragment;
 import com.assignment.knowledgebooster.News.NewsVoteFragment;
 import com.assignment.knowledgebooster.R;
 
-public class NewsBottomNavigation extends AppCompatActivity {
-
+public class News extends AppCompatActivity {
     private TextView mTextMessage;
     FragmentManager fm = getSupportFragmentManager();
     NewsFragment newsFragment = new NewsFragment();
@@ -42,13 +41,12 @@ public class NewsBottomNavigation extends AppCompatActivity {
                     }
                     return true;
                 case R.id.news_navigation_conmment:
-                    Toast.makeText(NewsBottomNavigation.this, "Show Comments", Toast.LENGTH_LONG).show();
+                    Toast.makeText(News.this, "Show Comments", Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.news_navigation_next:
                     fm.beginTransaction().replace(R.id.newsFrameLayout, newsFragment).commit();
                     fm.beginTransaction().replace(R.id.newsVoteResultFrameLayout, newsVoteFragment).commit();
                     return true;
-
             }
             return false;
         }
@@ -57,11 +55,10 @@ public class NewsBottomNavigation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_bottom_navigation);
+        setContentView(R.layout.activity_news);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
         fm.beginTransaction().add(R.id.newsFrameLayout, newsFragment).commit();
         fm.beginTransaction().add(R.id.newsVoteResultFrameLayout, newsVoteFragment).commit();
@@ -69,13 +66,18 @@ public class NewsBottomNavigation extends AppCompatActivity {
         setNightMode();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_home);
+    }
 
     public void btnNewsAnswerSubmit(View v){
         fm.beginTransaction().replace(R.id.newsVoteResultFrameLayout, newsResultFragment).commit();
     }
 
     protected void imgBtnNewsBackOnClick(View v){
-
         finish();
     }
 
@@ -83,17 +85,11 @@ public class NewsBottomNavigation extends AppCompatActivity {
         mPrefs = this.getSharedPreferences("myPreference",0);
 
         if(mPrefs.getBoolean("NightMode", true) == true){
-
-            LinearLayout newsBottomHeader;
-            ImageButton imgBtnBack, imgBtnSearch;
-            Button btnCategory;
-            FrameLayout newsFrameLayout;
-
-            newsBottomHeader = findViewById(R.id.newsBottomHeader);
-            imgBtnBack = findViewById(R.id.imgBtnBack);
-            imgBtnSearch = findViewById(R.id.imgBtnSearch);
-            btnCategory = findViewById(R.id.btnCategory);
-            newsFrameLayout = findViewById(R.id.newsFrameLayout);
+            LinearLayout newsBottomHeader = findViewById(R.id.newsBottomHeader);
+            ImageButton imgBtnBack = findViewById(R.id.imgBtnBack)
+                    , imgBtnSearch = findViewById(R.id.imgBtnSearch);
+            Button btnCategory = findViewById(R.id.btnCategory);
+            FrameLayout newsFrameLayout = findViewById(R.id.newsFrameLayout);
 
             newsBottomHeader.setBackgroundColor(Color.BLACK);
             imgBtnBack.setBackgroundColor(Color.BLACK);
@@ -101,9 +97,6 @@ public class NewsBottomNavigation extends AppCompatActivity {
             btnCategory.setTextColor(Color.WHITE);
             imgBtnSearch.setBackgroundColor(Color.BLACK);
             newsFrameLayout.setBackgroundColor(Color.BLACK);
-
         }
     }
-
-
 }

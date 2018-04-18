@@ -35,11 +35,11 @@
         <activity android:name=".CreateQuestion.SetQuestionActivity" />
         <activity android:name=".CreateQuestion.SetExplanationActivity" />
         <activity
-            android:name=".main.NewsBottomNavigation"
+            android:name=".main.News"
             android:label="@string/title_activity_news_bottom_navigation" />
         <activity android:name=".Message.MessageSearchIdActivity" />
         <activity
-            android:name=".OtherUserProfile.OtherUserProfile"
+            android:name=".OtherUserProfile"
             android:label="@string/title_activity_other_user_profile" />
         <activity android:name=".Message.SendMessage" />
 

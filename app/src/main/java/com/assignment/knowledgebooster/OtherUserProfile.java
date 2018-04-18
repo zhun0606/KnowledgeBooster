@@ -1,4 +1,4 @@
-package com.assignment.knowledgebooster.OtherUserProfile;
+package com.assignment.knowledgebooster;
 
 import android.content.Intent;
 import android.os.Bundle;

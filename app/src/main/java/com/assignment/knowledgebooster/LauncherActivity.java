@@ -8,6 +8,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.assignment.knowledgebooster.FirebaseClass.User;
 import com.assignment.knowledgebooster.main.MainActivity;
 import com.crashlytics.android.answers.Answers;
 import com.firebase.ui.auth.AuthUI;
@@ -118,7 +119,7 @@ public class LauncherActivity extends AppCompatActivity {
                 if (!dataSnapshot.exists()) {
                     String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     String email = FirebaseAuth.getInstance().getCurrentUser().getEmail().toLowerCase();
-                    User user = new User(user_id,name,email);
+                    User user = new User(user_id,name,email,0,0);
                     databaseReference.setValue(user);
                 }
             }

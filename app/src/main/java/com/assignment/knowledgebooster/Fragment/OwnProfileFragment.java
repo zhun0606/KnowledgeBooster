@@ -1,4 +1,4 @@
-package com.assignment.knowledgebooster.OwnProfile;
+package com.assignment.knowledgebooster.Fragment;
 
 
 import android.app.Activity;
