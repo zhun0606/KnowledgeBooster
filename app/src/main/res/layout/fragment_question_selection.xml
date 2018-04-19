@@ -106,33 +106,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
-                android:text="A. Ugly"
+                android:text="A."
+                android:onClick="answeringQuestion"
                 android:gravity="start"
-                android:textAlignment="textStart" />
+                android:textAlignment="center" />
             <Button
                 android:id="@+id/btnB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
-                android:text="B. Ugly"
+                android:text="B."
                 android:gravity="start"
-                android:textAlignment="textStart" />
+                android:onClick="answeringQuestion"
+                android:textAlignment="center" />
             <Button
                 android:id="@+id/btnC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
-                android:text="C. Ugly"
+                android:text="C."
                 android:gravity="start"
-                android:textAlignment="textStart" />
+                android:onClick="answeringQuestion"
+                android:textAlignment="center" />
             <Button
                 android:id="@+id/btnD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
-                android:text="D. Ugly"
+                android:text="D."
                 android:gravity="start"
-                android:textAlignment="textStart"/>
+                android:onClick="answeringQuestion"
+                android:textAlignment="center"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -11,16 +11,27 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.assignment.knowledgebooster.FirebaseClass.QuestionAnswered;
+import com.assignment.knowledgebooster.FirebaseClass.Questions;
 import com.assignment.knowledgebooster.FirebaseClass.Selection;
 import com.assignment.knowledgebooster.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class QuestionSelectionFragment extends Fragment {
-    TextView txtQuestion;
-    Button btnA,btnB,btnC,btnD;
-    Selection ques;
+    public Questions questions;
+    public QuestionAnswered questionAnswered;
+    public Selection ques;
+
+    public TextView txtQuestion;
+    public Button btnA,btnB,btnC,btnD;
 
     public QuestionSelectionFragment(){
 
@@ -38,14 +49,46 @@ public class QuestionSelectionFragment extends Fragment {
         displayQuestion();
         return v;
     }
-
     public void setArguments(Selection selection) {
         this.ques = selection;
+    }
+    public void retrieveQuestion() {
+        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
+        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                questions = dataSnapshot.child("questions").getValue(Questions.class);
+                while (questions.getPictionaries().remove(null));
+                while (questions.getScrambles().remove(null));
+                while (questions.getSelections().remove(null));
+                retrieveAnsweredQuestion();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void retrieveAnsweredQuestion() {
+        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
+        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                questionAnswered = dataSnapshot.child("questionAnswered").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(QuestionAnswered.class);
+                while (questionAnswered.getPictionaries().remove(null));
+                while (questionAnswered.getScrambles().remove(null));
+                while (questionAnswered.getSelections().remove(null));
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     protected void displayQuestion(){
         ArrayList<String> answ = new ArrayList<>();
-        if(ques.getFake2().equals("no")  && ques.getFake3().equals("no")){
+        if(ques.getFake2().equals("")  && ques.getFake3().equals("")){
             answ.add(ques.getAnswer());
             answ.add(ques.getFake1());
             Collections.shuffle(answ);
@@ -55,7 +98,7 @@ public class QuestionSelectionFragment extends Fragment {
             btnC.setVisibility(View.INVISIBLE);
             btnD.setVisibility(View.INVISIBLE);
         }
-        else if(ques.getFake3().equals("no")){
+        else if(ques.getFake3().equals("")){
             answ.add(ques.getAnswer());
             answ.add(ques.getFake1());
             answ.add(ques.getFake2());
@@ -78,7 +121,5 @@ public class QuestionSelectionFragment extends Fragment {
             btnD.setText(answ.get(3));
         }
     }
-    protected void answeringQuestion(View v){
 
-    }
 }

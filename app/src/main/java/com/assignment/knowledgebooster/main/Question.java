@@ -26,6 +26,7 @@ import com.assignment.knowledgebooster.FirebaseClass.QuestionAnswered;
 import com.assignment.knowledgebooster.FirebaseClass.Questions;
 import com.assignment.knowledgebooster.FirebaseClass.Scramble;
 import com.assignment.knowledgebooster.FirebaseClass.Selection;
+import com.assignment.knowledgebooster.FirebaseClass.User;
 import com.assignment.knowledgebooster.Fragment.QuestionPictionaryFragment;
 import com.assignment.knowledgebooster.Fragment.QuestionSelectionFragment;
 import com.assignment.knowledgebooster.R;
@@ -44,7 +45,13 @@ import java.util.List;
 
 public class Question extends AppCompatActivity {
     public Questions questions;
+    public Questions questionsToDisplay;
     public QuestionAnswered questionAnswered;
+
+    public User currentUser;
+    Selection selectionQuestion;
+    Pictionary pictionaryQuestion;
+    Scramble scrambleQuestion;
 
     TextView  txtViewAnswer, txtViewExplanation;
     EditText editTxtHint,editTextAnswer, editTextExplanation, editTextInputSearchQuestion;
@@ -66,8 +73,7 @@ public class Question extends AppCompatActivity {
         navigation = findViewById(R.id.navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        retrieveQuestion();
-        checkQuestionTypeAndDisplay();
+        retrieveUser();
 
         setNightMode();
     }
@@ -78,17 +84,20 @@ public class Question extends AppCompatActivity {
             if(extras.getString("Monthly Pickup")  != null){
                 btnCategory.setText("Monthly Pickup");
                 extras.putString("text1","hello");
-                selectionFragment.setArguments(displayQuestionSelection());
+                selectionQuestion = displayQuestionSelection();
+                selectionFragment.setArguments(selectionQuestion);
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Detective") != null){
                 btnCategory.setText("Detective");
-                selectionFragment.setArguments(displayQuestionSelection());
+                selectionQuestion = displayQuestionSelection();
+                selectionFragment.setArguments(selectionQuestion);
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Logic") != null){
                 btnCategory.setText("Logic");
-                selectionFragment.setArguments(displayQuestionSelection());
+                selectionQuestion = displayQuestionSelection();
+                selectionFragment.setArguments(selectionQuestion);
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Pictionary") != null){
@@ -97,17 +106,20 @@ public class Question extends AppCompatActivity {
             }
             else if(extras.getString("General Knowledge") != null){
                 btnCategory.setText("General Knowledge");
-                selectionFragment.setArguments(displayQuestionSelection());
+                selectionQuestion = displayQuestionSelection();
+                selectionFragment.setArguments(selectionQuestion);
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Mathematics World") != null){
                 btnCategory.setText("Mathematics World");
-                selectionFragment.setArguments(displayQuestionSelection());
+                selectionQuestion = displayQuestionSelection();
+                selectionFragment.setArguments(selectionQuestion);
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Decision Making") != null){
                 btnCategory.setText("Decision Making");
-                selectionFragment.setArguments(displayQuestionSelection());
+                selectionQuestion = displayQuestionSelection();
+                selectionFragment.setArguments(selectionQuestion);
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
         }catch (NullPointerException ex){
@@ -118,6 +130,20 @@ public class Question extends AppCompatActivity {
     //////////////////////////////////////////////////////////////////////////////////////////////
     ////    Retrieving Question from FireBase and Removing Answered Question before Display   ////
     //////////////////////////////////////////////////////////////////////////////////////////////
+    public void retrieveUser() {
+        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
+        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUser = dataSnapshot.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(User.class);
+                retrieveQuestion();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public void retrieveQuestion() {
         DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
         databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,6 +170,23 @@ public class Question extends AppCompatActivity {
                 while (questionAnswered.getPictionaries().remove(null));
                 while (questionAnswered.getScrambles().remove(null));
                 while (questionAnswered.getSelections().remove(null));
+                retrieveQuestion1();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void retrieveQuestion1() {
+        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
+        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                questionsToDisplay = dataSnapshot.child("questions").getValue(Questions.class);
+                while (questionsToDisplay.getPictionaries().remove(null));
+                while (questionsToDisplay.getScrambles().remove(null));
+                while (questionsToDisplay.getSelections().remove(null));
                 removeAnsweredQuestion();
             }
             @Override
@@ -152,57 +195,226 @@ public class Question extends AppCompatActivity {
             }
         });
     }
+
     public void removeAnsweredQuestion(){
         ArrayList<Pictionary> questionPictionaryToBeRemove = new ArrayList<>();
         ArrayList<Selection> questionSelectionToBeRemove = new ArrayList<>();
         ArrayList<Scramble> questionScrambleToBeRemove = new ArrayList<>();
+
         for(String ss : questionAnswered.getPictionaries()){
-            for(Pictionary pictionaryQuestion : questions.getPictionaries()){
+            for(Pictionary pictionaryQuestion : questionsToDisplay.getPictionaries()){
                 try{
                     if(pictionaryQuestion.getQuestionId().equals(ss))
                         questionPictionaryToBeRemove.add(pictionaryQuestion);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
+                }catch(Exception ex){ ex.printStackTrace(); }
             }
-        }
-        questions.getPictionaries().removeAll(questionPictionaryToBeRemove);
+        }questionsToDisplay.getPictionaries().removeAll(questionPictionaryToBeRemove);
 
         for(String ss : questionAnswered.getScrambles()){
-            for(Scramble scrambleQuestion : questions.getScrambles()){
+            for(Scramble scrambleQuestion : questionsToDisplay.getScrambles()){
                 try{
                     if(scrambleQuestion.getQuestionId().equals(ss))
                         questionScrambleToBeRemove.add(scrambleQuestion);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
+                }catch(Exception ex){ ex.printStackTrace(); }
             }
-        }
-        questions.getScrambles().removeAll(questionScrambleToBeRemove);
+        }questionsToDisplay.getScrambles().removeAll(questionScrambleToBeRemove);
 
         for(String ss : questionAnswered.getSelections()){
-            for(Selection selectionQuestion : questions.getSelections()){
+            for(Selection selectionQuestion : questionsToDisplay.getSelections()){
                 try{
                     if(selectionQuestion.getQuestionId().equals(ss))
                         questionSelectionToBeRemove.add(selectionQuestion);
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
+                }catch(Exception ex){ ex.printStackTrace(); }
             }
-        }
-        questions.getSelections().removeAll(questionSelectionToBeRemove);
+        }questionsToDisplay.getSelections().removeAll(questionSelectionToBeRemove);
 
         checkQuestionTypeAndDisplay();
     }
 
-    public void displayQuestionScramble(){}
-    public void displayQuestionPictionary(){}
+    public Scramble displayQuestionScramble(){
+        ArrayList<Scramble> scrambleQuestion = questions.getScrambles();
+        // shuffle the question
+        Collections.shuffle(scrambleQuestion);
+        //return first question
+        return scrambleQuestion.get(0);
+    }
+    public Pictionary displayQuestionPictionary(){
+        ArrayList<Pictionary> pictionaryQuestion = questions.getPictionaries();
+        // shuffle the question
+        Collections.shuffle(pictionaryQuestion);
+        //return first question
+        return pictionaryQuestion.get(0);
+    }
     public Selection displayQuestionSelection(){
-        ArrayList<Selection> selectionQuestion = questions.getSelections();
+        //Questions questionsToDisplay = removeAnsweredQuestion();
+        ArrayList<Selection> selectionQuestion = questionsToDisplay.getSelections();
         // shuffle the question
         Collections.shuffle(selectionQuestion);
         //return first question
         return selectionQuestion.get(0);
+    }
+
+    /////////////////////////////////////////////////////
+    ////    Validate User Answering the Question    ////
+    ////////////////////////////////////////////////////
+    public void answeringQuestion(View view) {
+        int viewMode = view.getId();
+        switch (viewMode){
+            case R.id.btnA:
+                if(selectionFragment.btnA.getText().equals(selectionFragment.ques.getAnswer())){
+                    correctSelectionAnswer(selectionQuestion);
+                }else{
+                    wrongSelectionAnswer(selectionQuestion);
+                }
+                break;
+            case R.id.btnB:
+                if(selectionFragment.btnB.getText().equals(selectionFragment.ques.getAnswer())){
+                    correctSelectionAnswer(selectionQuestion);
+                }else{
+                    wrongSelectionAnswer(selectionQuestion);
+                }
+                break;
+            case R.id.btnC:
+                if(selectionFragment.btnC.getText().equals(selectionFragment.ques.getAnswer())){
+                    correctSelectionAnswer(selectionQuestion);
+                }else{
+                    wrongSelectionAnswer(selectionQuestion);
+                }
+                break;
+            case R.id.btnD:
+                if(selectionFragment.btnD.getText().equals(selectionFragment.ques.getAnswer())){
+                    correctSelectionAnswer(selectionQuestion);
+                }else{
+                    wrongSelectionAnswer(selectionQuestion);
+                }
+                break;
+        }
+        callUpdate();
+    }
+    protected void correctSelectionAnswer(Selection selection){
+        // update Question Answered
+        questionAnswered.getSelections().add(selection.getQuestionId());
+        ///////////// indexfound -1
+        for(Selection compare : questions.getSelections()){
+            if(compare.equals(selection))
+                Log.w("",compare.toString());
+        }
+
+        int index = questions.getSelections().indexOf(selection);
+        int totalQuestion = questions.getSelections().get(index).getTotalAnswer() + 1;
+        int correctAnswer = questions.getSelections().get(index).getCorrectAnswer() + 1;
+        questions.getSelections().get(index).setTotalAnswer(totalQuestion);
+        questions.getSelections().get(index).setCorrectAnswer(correctAnswer);
+
+        int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
+        int userTotalCorrectQuestionAnswered = currentUser.getTotalCorrectQuestionAnswered() + 1;
+        currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
+        currentUser.setTotalCorrectQuestionAnswered(userTotalCorrectQuestionAnswered);
+        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+    }
+    protected void correctPictionaryAnswer(Pictionary pictionary){
+        questionAnswered.getPictionaries().add(pictionary.getQuestionId());
+
+        int index = questions.getPictionaries().indexOf(pictionary);
+        int totalQuestion = questions.getPictionaries().get(index).getTotalAnswers() + 1;
+        int correctAnswer = questions.getPictionaries().get(index).getCorrectAnswer() + 1;
+        questions.getPictionaries().get(index).setTotalAnswers(totalQuestion);
+        questions.getPictionaries().get(index).setCorrectAnswer(correctAnswer);
+
+        int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
+        int userTotalCorrectQuestionAnswered = currentUser.getTotalCorrectQuestionAnswered() + 1;
+        currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
+        currentUser.setTotalCorrectQuestionAnswered(userTotalCorrectQuestionAnswered);
+        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+    }
+    protected void correctScrambleAnswer(Scramble scramble){
+        questionAnswered.getScrambles().add(scramble.getQuestionId());
+
+        int index = questions.getScrambles().indexOf(scramble);
+        int totalQuestion = questions.getScrambles().get(index).getTotalAnswers() + 1;
+        int correctAnswer = questions.getScrambles().get(index).getCorrectAnswer() + 1;
+        questions.getScrambles().get(index).setTotalAnswers(totalQuestion);
+        questions.getScrambles().get(index).setCorrectAnswer(correctAnswer);
+
+        int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
+        int userTotalCorrectQuestionAnswered = currentUser.getTotalCorrectQuestionAnswered() + 1;
+        currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
+        currentUser.setTotalCorrectQuestionAnswered(userTotalCorrectQuestionAnswered);
+        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+    }
+    protected void wrongSelectionAnswer(Selection selection){
+        int index = questions.getSelections().indexOf(selection);
+        int totalQuestion = questions.getSelections().get(index).getTotalAnswer() + 1;
+        questions.getSelections().get(index).setTotalAnswer(totalQuestion);
+        int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
+        currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
+        Toast.makeText(getApplicationContext(),"Wrong Answer",Toast.LENGTH_SHORT).show();
+    }
+    protected void wrongPictionaryAnswer(Pictionary pictionary){
+        questionAnswered.getPictionaries().add(pictionary.getQuestionId());
+
+        int index = questions.getPictionaries().indexOf(pictionary);
+        int totalQuestion = questions.getPictionaries().get(index).getTotalAnswers() + 1;
+        questions.getPictionaries().get(index).setTotalAnswers(totalQuestion);
+
+        int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
+        currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
+        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+    }
+    protected void wrongScrambleAnswer(Scramble scramble){
+        questionAnswered.getScrambles().add(scramble.getQuestionId());
+
+        int index = questions.getScrambles().indexOf(scramble);
+        int totalQuestion = questions.getScrambles().get(index).getTotalAnswers() + 1;
+        questions.getScrambles().get(index).setTotalAnswers(totalQuestion);
+
+        int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;;
+        currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
+        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+    }
+
+    ////////////////////////////////////////////////
+    ////    Updating Firebase after Answering   ////
+    ////////////////////////////////////////////////
+    protected void callUpdate(){
+        updateUser();
+        updateQuestionAnswered();
+        updateQuestions();
+    }
+    public void updateUser(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("User").child(currentUser.getUid());
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    databaseReference.setValue(currentUser);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+    }
+    public void updateQuestionAnswered(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("questionAnswered").child(currentUser.getUid());
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    databaseReference.setValue(questionAnswered);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });}
+    public void updateQuestions(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("questions");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    databaseReference.setValue(questions);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
     }
 
     public void btnSearchOnQuestionClick(View view){
@@ -340,7 +552,6 @@ public class Question extends AppCompatActivity {
                     btnCategory = findViewById(R.id.btnCategory);
                     if("Pictionary".equals(btnCategory.getText())){
                         fm.beginTransaction().replace(R.id.questionFrameLayout, pictionaryFragment).addToBackStack(null).commit();
-
                     }else{
                         fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).addToBackStack(null).commit();
                     }

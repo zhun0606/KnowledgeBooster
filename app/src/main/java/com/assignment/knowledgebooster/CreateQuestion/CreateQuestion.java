@@ -224,13 +224,9 @@ public class CreateQuestion extends AppCompatActivity implements View.OnClickLis
         }
         else{
             int length = questions.getSelections().size();
-            String fake1="", fake2="", fake3="";
-            if(editTextFake1.getText().toString().equals(""))
-                fake1 = "no";
-            if(editTextFake2.getText().toString().equals(""))
-                fake2 = "no";
-            if(editTextFake3.getText().toString().equals(""))
-                fake3 = "no";
+            String fake1= editTextFake1.getText().toString()
+                    , fake2=editTextFake2.getText().toString()
+                    , fake3=editTextFake3.getText().toString();
 
             Selection selection = new Selection(""+(length+1),txtQuestion.getText().toString(),editTextAnswer.getText().toString(),fake1,fake2,fake3,"",0,0);
             selection.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getUid());
