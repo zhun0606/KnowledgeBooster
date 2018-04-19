@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +27,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class QuestionSelectionFragment extends Fragment {
-    public Questions questions;
-    public QuestionAnswered questionAnswered;
     public Selection ques;
 
     public TextView txtQuestion;
     public Button btnA,btnB,btnC,btnD;
 
-    public QuestionSelectionFragment(){
+    TextView txtViewQuestionID,txtViewTotalAnswer,txtAuthorName;
+    RatingBar ratingBar;
+    String name;
 
-    }
-
+    public QuestionSelectionFragment(){ }
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question_selection, container, false);
@@ -46,46 +46,18 @@ public class QuestionSelectionFragment extends Fragment {
         btnB = v.findViewById(R.id.btnB);
         btnC = v.findViewById(R.id.btnC);
         btnD = v.findViewById(R.id.btnD);
+
+        txtViewQuestionID = v.findViewById(R.id.txtViewQuestionID);
+        txtViewTotalAnswer = v.findViewById(R.id.txtViewTotalAnswer);
+        txtAuthorName = v.findViewById(R.id.txtAuthorName);
+        ratingBar = v.findViewById(R.id.ratingBar);
+
         displayQuestion();
         return v;
     }
-    public void setArguments(Selection selection) {
-        this.ques = selection;
+    public void setArguments(Selection selection, String name) {
+        this.ques = selection; this.name = name;
     }
-    public void retrieveQuestion() {
-        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
-        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                questions = dataSnapshot.child("questions").getValue(Questions.class);
-                while (questions.getPictionaries().remove(null));
-                while (questions.getScrambles().remove(null));
-                while (questions.getSelections().remove(null));
-                retrieveAnsweredQuestion();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    public void retrieveAnsweredQuestion() {
-        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
-        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                questionAnswered = dataSnapshot.child("questionAnswered").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(QuestionAnswered.class);
-                while (questionAnswered.getPictionaries().remove(null));
-                while (questionAnswered.getScrambles().remove(null));
-                while (questionAnswered.getSelections().remove(null));
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     protected void displayQuestion(){
         ArrayList<String> answ = new ArrayList<>();
         if(ques.getFake2().equals("")  && ques.getFake3().equals("")){
@@ -120,6 +92,17 @@ public class QuestionSelectionFragment extends Fragment {
             btnC.setText(answ.get(2));
             btnD.setText(answ.get(3));
         }
-    }
 
+        txtViewQuestionID.setText("#"+ques.getQuestionId());
+        txtViewTotalAnswer.setText("( " + ques.getTotalAnswer()+" )");
+        double rate;
+        double correct = ques.getCorrectAnswer();
+        double total = ques.getTotalAnswer();
+        if(ques.getCorrectAnswer() == 0)
+            rate = 0;
+        else
+            rate =  correct/ total * 5 ;
+        ratingBar.setRating((float)rate);
+        txtAuthorName.setText(name);
+    }
 }

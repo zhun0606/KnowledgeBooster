@@ -28,6 +28,7 @@ import com.assignment.knowledgebooster.FirebaseClass.Scramble;
 import com.assignment.knowledgebooster.FirebaseClass.Selection;
 import com.assignment.knowledgebooster.FirebaseClass.User;
 import com.assignment.knowledgebooster.Fragment.QuestionPictionaryFragment;
+import com.assignment.knowledgebooster.Fragment.QuestionScrambleFragment;
 import com.assignment.knowledgebooster.Fragment.QuestionSelectionFragment;
 import com.assignment.knowledgebooster.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,6 +62,7 @@ public class Question extends AppCompatActivity {
     public FragmentManager fm = getSupportFragmentManager();
     QuestionSelectionFragment selectionFragment = new QuestionSelectionFragment();
     QuestionPictionaryFragment pictionaryFragment = new QuestionPictionaryFragment();
+    QuestionScrambleFragment scrambleFragment = new QuestionScrambleFragment();
 
     SharedPreferences mPrefs;
 
@@ -87,41 +89,43 @@ public class Question extends AppCompatActivity {
                 btnCategory.setText("Monthly Pickup");
                 extras.putString("text1","hello");
                 selectionQuestion = displayQuestionSelection();
-                selectionFragment.setArguments(selectionQuestion);
+                selectionFragment.setArguments(selectionQuestion,currentUser.getName());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Detective") != null){
                 btnCategory.setText("Detective");
                 selectionQuestion = displayQuestionSelection();
-                selectionFragment.setArguments(selectionQuestion);
+                selectionFragment.setArguments(selectionQuestion,currentUser.getName());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Logic") != null){
                 btnCategory.setText("Logic");
                 selectionQuestion = displayQuestionSelection();
-                selectionFragment.setArguments(selectionQuestion);
+                selectionFragment.setArguments(selectionQuestion,currentUser.getName());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Pictionary") != null){
                 btnCategory.setText("Pictionary");
+                pictionaryQuestion = displayQuestionPictionary();
+                pictionaryFragment.setArguments(pictionaryQuestion,currentUser.getName());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, pictionaryFragment).commit();
             }
             else if(extras.getString("General Knowledge") != null){
                 btnCategory.setText("General Knowledge");
                 selectionQuestion = displayQuestionSelection();
-                selectionFragment.setArguments(selectionQuestion);
+                selectionFragment.setArguments(selectionQuestion,currentUser.getName());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
             else if(extras.getString("Mathematics World") != null){
                 btnCategory.setText("Mathematics World");
-                selectionQuestion = displayQuestionSelection();
-                selectionFragment.setArguments(selectionQuestion);
-                fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
+                scrambleQuestion = displayQuestionScramble();
+                scrambleFragment.setArguments(scrambleQuestion,currentUser.getName());
+                fm.beginTransaction().replace(R.id.questionFrameLayout, scrambleFragment).commit();
             }
             else if(extras.getString("Decision Making") != null){
                 btnCategory.setText("Decision Making");
                 selectionQuestion = displayQuestionSelection();
-                selectionFragment.setArguments(selectionQuestion);
+                selectionFragment.setArguments(selectionQuestion,currentUser.getName());
                 fm.beginTransaction().replace(R.id.questionFrameLayout, selectionFragment).commit();
             }
         }catch (NullPointerException ex){
@@ -260,36 +264,56 @@ public class Question extends AppCompatActivity {
         int viewMode = view.getId();
         switch (viewMode){
             case R.id.btnA:
-                if(selectionFragment.btnA.getText().equals(selectionFragment.ques.getAnswer())){
-                    correctSelectionAnswer(selectionQuestion);
-                }else{
-                    wrongSelectionAnswer(selectionQuestion);
-                }
+                if(selectionFragment.btnA.getText().equals(selectionFragment.ques.getAnswer()))
+                    correctSelectionAnswer(selectionFragment.ques);
+                else
+                    wrongSelectionAnswer(selectionFragment.ques);
+
                 break;
             case R.id.btnB:
-                if(selectionFragment.btnB.getText().equals(selectionFragment.ques.getAnswer())){
-                    correctSelectionAnswer(selectionQuestion);
-                }else{
-                    wrongSelectionAnswer(selectionQuestion);
-                }
+                if(selectionFragment.btnB.getText().equals(selectionFragment.ques.getAnswer()))
+                    correctSelectionAnswer(selectionFragment.ques);
+                else
+                    wrongSelectionAnswer(selectionFragment.ques);
+
                 break;
             case R.id.btnC:
-                if(selectionFragment.btnC.getText().equals(selectionFragment.ques.getAnswer())){
-                    correctSelectionAnswer(selectionQuestion);
-                }else{
-                    wrongSelectionAnswer(selectionQuestion);
-                }
+                if(selectionFragment.btnC.getText().equals(selectionFragment.ques.getAnswer()))
+                    correctSelectionAnswer(selectionFragment.ques);
+                else
+                    wrongSelectionAnswer(selectionFragment.ques);
+
                 break;
             case R.id.btnD:
-                if(selectionFragment.btnD.getText().equals(selectionFragment.ques.getAnswer())){
-                    correctSelectionAnswer(selectionQuestion);
-                }else{
-                    wrongSelectionAnswer(selectionQuestion);
-                }
+                if(selectionFragment.btnD.getText().equals(selectionFragment.ques.getAnswer()))
+                    correctSelectionAnswer(selectionFragment.ques);
+                else
+                    wrongSelectionAnswer(selectionFragment.ques);
+
                 break;
-        }
-        callUpdate();
+        }callUpdate();
     }
+    public void answeringPictionaryQuestion(View view){
+        int viewMode = view.getId();
+        switch (viewMode) {
+            case R.id.btnSubmitQuestionPictionary:
+                if(pictionaryFragment.editTxtPictionaryAnswer.getText().toString().equals(pictionaryFragment.ques.getPicUrl()))
+                    correctPictionaryAnswer(pictionaryQuestion);
+                else
+                    wrongPictionaryAnswer(pictionaryQuestion);
+        }callUpdate();
+    }
+    public void answeringScrambleQuestion(View view){
+        int viewMode = view.getId();
+        switch (viewMode) {
+            case R.id.btnSubmitQuestionScramble:
+                if(scrambleFragment.editTxtScrambleAnswer.getText().toString().equals(scrambleFragment.ques.getQuestion()))
+                    correctScrambleAnswer(scrambleQuestion);
+                else
+                    wrongScrambleAnswer(scrambleQuestion);
+        }callUpdate();
+    }
+
     protected void correctSelectionAnswer(Selection selection){
         // update Question Answered
         questionAnswered.getSelections().add(selection.getQuestionId());
@@ -311,11 +335,15 @@ public class Question extends AppCompatActivity {
     protected void correctPictionaryAnswer(Pictionary pictionary){
         questionAnswered.getPictionaries().add(pictionary.getQuestionId());
 
-        int index = questions.getPictionaries().indexOf(pictionary);
-        int totalQuestion = questions.getPictionaries().get(index).getTotalAnswers() + 1;
-        int correctAnswer = questions.getPictionaries().get(index).getCorrectAnswer() + 1;
-        questions.getPictionaries().get(index).setTotalAnswers(totalQuestion);
-        questions.getPictionaries().get(index).setCorrectAnswer(correctAnswer);
+        int index = 0;
+        for(int i =0; i < questionsToDisplay.getSelections().size();i++){
+            if( pictionary.getQuestionId().equals(questionsToDisplay.getSelections().get(i).getQuestionId()));
+            index = i;
+        }
+        int totalQuestion = questionsToDisplay.getPictionaries().get(index).getTotalAnswers() + 1;
+        int correctAnswer = questionsToDisplay.getPictionaries().get(index).getCorrectAnswer() + 1;
+        questionsToDisplay.getPictionaries().get(index).setTotalAnswers(totalQuestion);
+        questionsToDisplay.getPictionaries().get(index).setCorrectAnswer(correctAnswer);
 
         int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
         int userTotalCorrectQuestionAnswered = currentUser.getTotalCorrectQuestionAnswered() + 1;
@@ -326,11 +354,15 @@ public class Question extends AppCompatActivity {
     protected void correctScrambleAnswer(Scramble scramble){
         questionAnswered.getScrambles().add(scramble.getQuestionId());
 
-        int index = questions.getScrambles().indexOf(scramble);
-        int totalQuestion = questions.getScrambles().get(index).getTotalAnswers() + 1;
-        int correctAnswer = questions.getScrambles().get(index).getCorrectAnswer() + 1;
-        questions.getScrambles().get(index).setTotalAnswers(totalQuestion);
-        questions.getScrambles().get(index).setCorrectAnswer(correctAnswer);
+        int index = 0;
+        for(int i =0; i < questionsToDisplay.getScrambles().size();i++){
+            if( scramble.getQuestionId().equals(questionsToDisplay.getScrambles().get(i).getQuestionId()));
+                index = i;
+        }
+        int totalQuestion = questionsToDisplay.getScrambles().get(index).getTotalAnswer() + 1;
+        int correctAnswer = questionsToDisplay.getScrambles().get(index).getCorrectAnswer() + 1;
+        questionsToDisplay.getScrambles().get(index).setTotalAnswer(totalQuestion);
+        questionsToDisplay.getScrambles().get(index).setCorrectAnswer(correctAnswer);
 
         int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
         int userTotalCorrectQuestionAnswered = currentUser.getTotalCorrectQuestionAnswered() + 1;
@@ -338,6 +370,7 @@ public class Question extends AppCompatActivity {
         currentUser.setTotalCorrectQuestionAnswered(userTotalCorrectQuestionAnswered);
         Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
     }
+
     protected void wrongSelectionAnswer(Selection selection){
         // update Question Answered
         questionAnswered.getSelections().add(selection.getQuestionId());
@@ -355,24 +388,32 @@ public class Question extends AppCompatActivity {
     protected void wrongPictionaryAnswer(Pictionary pictionary){
         questionAnswered.getPictionaries().add(pictionary.getQuestionId());
 
-        int index = questions.getPictionaries().indexOf(pictionary);
-        int totalQuestion = questions.getPictionaries().get(index).getTotalAnswers() + 1;
-        questions.getPictionaries().get(index).setTotalAnswers(totalQuestion);
+        int index = 0;
+        for(int i =0; i < questionsToDisplay.getSelections().size();i++){
+            if( pictionary.getQuestionId().equals(questionsToDisplay.getSelections().get(i).getQuestionId()));
+            index = i;
+        }
+        int totalQuestion = questionsToDisplay.getPictionaries().get(index).getTotalAnswers() + 1;
+        questionsToDisplay.getPictionaries().get(index).setTotalAnswers(totalQuestion);
 
         int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
         currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
-        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Wrong Answer",Toast.LENGTH_SHORT).show();
     }
     protected void wrongScrambleAnswer(Scramble scramble){
         questionAnswered.getScrambles().add(scramble.getQuestionId());
 
-        int index = questions.getScrambles().indexOf(scramble);
-        int totalQuestion = questions.getScrambles().get(index).getTotalAnswers() + 1;
-        questions.getScrambles().get(index).setTotalAnswers(totalQuestion);
+        int index = 0;
+        for(int i =0; i < questionsToDisplay.getSelections().size();i++){
+            if( scramble.getQuestionId().equals(questionsToDisplay.getSelections().get(i).getQuestionId()));
+            index = i;
+        }
+        int totalQuestion = questionsToDisplay.getScrambles().get(index).getTotalAnswer() + 1;
+        questionsToDisplay.getScrambles().get(index).setTotalAnswer(totalQuestion);
 
         int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;;
         currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
-        Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Wrong Answer",Toast.LENGTH_SHORT).show();
     }
 
     ////////////////////////////////////////////////
@@ -418,16 +459,6 @@ public class Question extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) { }
         });
     }
-
-
-
-
-
-
-
-
-
-
 
     public void btnSearchOnQuestionClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

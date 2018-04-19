@@ -4,7 +4,7 @@ public class Scramble {
     private String questionId;
     private String question;
     private String author;
-    private int totalAnswers;
+    private int totalAnswer;
     private int correctAnswer;
 
     public Scramble() {
@@ -14,7 +14,7 @@ public class Scramble {
         this.questionId = questionId;
         this.question = question;
         this.author = author;
-        this.totalAnswers = totalAnswers;
+        this.totalAnswer = totalAnswers;
         this.correctAnswer = correctAnswer;
     }
 
@@ -42,12 +42,12 @@ public class Scramble {
         this.author = author;
     }
 
-    public int getTotalAnswers() {
-        return totalAnswers;
+    public int getTotalAnswer() {
+        return totalAnswer;
     }
 
-    public void setTotalAnswers(int totalAnswers) {
-        this.totalAnswers = totalAnswers;
+    public void setTotalAnswer(int totalAnswer) {
+        this.totalAnswer = totalAnswer;
     }
 
     public int getCorrectAnswer() {
@@ -64,7 +64,7 @@ public class Scramble {
                 "questionId='" + questionId + '\'' +
                 ", question='" + question + '\'' +
                 ", author='" + author + '\'' +
-                ", totalAnswers=" + totalAnswers +
+                ", totalAnswer=" + totalAnswer +
                 ", correctAnswer=" + correctAnswer +
                 '}';
     }

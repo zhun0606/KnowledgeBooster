@@ -1,7 +1,8 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -12,7 +13,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/txtViewQuestionID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="#QuestionIdNo"
@@ -49,7 +50,7 @@
                     android:numStars="5"
                     android:rating="4"/>
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/txtViewTotalAnswer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(2K+)"/>
@@ -69,6 +70,7 @@
                     android:text="@string/creditAuthor"
                     android:textColor="@color/deepSkyBlue"/>
             </LinearLayout>
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_weight="1"
@@ -87,21 +89,27 @@
                     android:text="What Is About The Following Picture ? " />
                 <ImageView
                     android:id="@+id/imgViewPictionaryQuestion"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="300dp" />
             </LinearLayout>
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_margin="5dp">
                 <EditText
                     android:id="@+id/editTxtPictionaryAnswer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Answer"/>
+                <Button
+                    android:id="@+id/btnSubmitQuestionPictionary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="answeringPictionaryQuestion"
+                    android:text="Submit Question"/>
             </LinearLayout>
-
             <TextView
                 android:id="@+id/txtCreditAuthor"
                 android:layout_width="match_parent"

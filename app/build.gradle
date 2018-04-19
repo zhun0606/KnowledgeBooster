@@ -36,8 +36,6 @@ android {
 }
 
 dependencies {
-    //implementation 'com.android.support:support-v4:27.1.1'
-    //implementation 'com.android.support:support-v4:27.1.1'
     ext {
         support_library_version = '27.0.2'
         google_play_services_version = '15.0.0'

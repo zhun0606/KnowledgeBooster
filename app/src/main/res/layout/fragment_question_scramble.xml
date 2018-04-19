@@ -1,10 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbarAlwaysDrawVerticalTrack="true">
-
+    android:fillViewport="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -19,27 +18,27 @@
                 android:id="@+id/txtViewQuestionID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#QuestionIdNo"
+                android:text="#"
                 android:layout_weight="5"/>
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/txtViewTag1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tag1"
                 android:layout_weight="1" />
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/txtViewTag2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tag2"
                 android:layout_weight="1" />
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/txtViewTag3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tag3"
                 android:layout_weight="1" />
-            </LinearLayout>
+        </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -51,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="4"/>
+                android:stepSize="0.01"/>
             <TextView
                 android:id="@+id/txtViewTotalAnswer"
                 android:layout_width="wrap_content"
@@ -77,7 +76,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp">
             <TextView
                 android:id="@+id/txtQuestion"
@@ -85,51 +84,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:maxEms="22"
-                android:singleLine="false"
-                android:layout_weight="1"
-                android:text="To set question, it will auto next line after 22 characters in conjunction. Max line temporary been set to 6.  Describe this person." />
+                android:textAlignment="center"
+                android:text="Reconstruct Scrambled Word Below" />
+            <TextView
+                android:id="@+id/txtViewQuestionScramble"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_margin="5dp">
-            <Button
-                android:id="@+id/btnA"
+            <EditText
+                android:id="@+id/editTxtScrambleAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:text="A."
-                android:onClick="answeringQuestion"
-                android:gravity="start"
-                android:textAlignment="center" />
+                android:hint="Answer"/>
             <Button
-                android:id="@+id/btnB"
-                android:layout_width="match_parent"
+                android:id="@+id/btnSubmitQuestionScramble"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:text="B."
-                android:gravity="start"
-                android:onClick="answeringQuestion"
-                android:textAlignment="center" />
-            <Button
-                android:id="@+id/btnC"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:text="C."
-                android:gravity="start"
-                android:onClick="answeringQuestion"
-                android:textAlignment="center" />
-            <Button
-                android:id="@+id/btnD"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:text="D."
-                android:gravity="start"
-                android:onClick="answeringQuestion"
-                android:textAlignment="center"/>
+                android:onClick="answeringScrambleQuestion"
+                android:text="Submit Answer"/>
         </LinearLayout>
         <TextView
             android:id="@+id/txtCreditAuthor"
