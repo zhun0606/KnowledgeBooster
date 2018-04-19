@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.assignment.knowledgebooster.CreateQuestion.SetExplanationActivity">
-
+    android:orientation="vertical">
     <LinearLayout
-        android:id="@+id/myQuestionLinearLayout"
+        android:id="@+id/mainHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        android:background="@color/colorAccent"
+        android:orientation="horizontal">
         <ImageButton
             android:id="@+id/imgBtnBack"
-            android:layout_width="10dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorAccent"
-            app:srcCompat="@android:drawable/ic_menu_revert"
-            />
-
+            android:background="@null"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
         <TextView
             android:id="@+id/txtViewMyQuestionHeader"
             android:layout_width="wrap_content"
@@ -34,9 +26,7 @@
             android:layout_weight="6"
             android:textAlignment="center"
             android:text="Explanation"
-            android:background="@color/colorAccent"
-            />
-
+            android:background="@color/colorAccent" />
         <Button
             android:id="@+id/btnOk"
             android:text="Ok"
@@ -45,57 +35,33 @@
             android:layout_weight="1"
             android:textColor="@color/colorWhite"
             android:background="@color/colorAccent"
-            android:onClick="btnSetExplanation"
-            />
-
+            android:onClick="btnSetExplanation" />
     </LinearLayout>
-
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="92dp"
         android:text="Answer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp" />
-
     <EditText
         android:id="@+id/editTextAnswer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="124dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp" />
-
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="220dp"
         android:text="Explanation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp" />
-
     <EditText
         android:id="@+id/editTextExplanation"
-        android:layout_width="358dp"
-        android:layout_height="149dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="260dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_marginLeft="16dp" />
+</LinearLayout>

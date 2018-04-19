@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.assignment.knowledgebooster.FirebaseClass.QuestionAnswered;
 import com.assignment.knowledgebooster.FirebaseClass.User;
 import com.assignment.knowledgebooster.main.MainActivity;
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -32,11 +33,11 @@ public class LauncherActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 100;
     private static final String GOOGLE_TOS_URL = "https://www.google.com/policies/terms/";
     private static final String GOOGLE_PRIVACY_POLICY_URL = "https://www.google.com/policies/privacy/";
-
+    private static final String FACEBOOK_URL = "https://assignment-76885.firebaseapp.com/__/auth/handler";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Answers());
+        Fabric.with(this, new Answers(), new Crashlytics());
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_launcher);
     }

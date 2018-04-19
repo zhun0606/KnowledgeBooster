@@ -40,7 +40,6 @@
             android:label="@string/title_activity_question_bottom_navigation" />
         <activity android:name=".CreateQuestion.MyQuestion" />
         <activity android:name=".CreateQuestion.CreateQuestion" />
-        <activity android:name=".CreateQuestion.SetQuestionActivity" />
         <activity android:name=".CreateQuestion.SetExplanationActivity" />
         <activity
             android:name=".main.News"
@@ -51,9 +50,8 @@
             android:label="@string/title_activity_other_user_profile" />
         <activity android:name=".Message.SendMessage" />
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="37ff1edaf162d3fb4e04338a46543e7323b3e508" />
+        <meta-data android:name="io.fabric.ApiKey" android:value="37ff1edaf162d3fb4e04338a46543e7323b3e508" />
+
 
     </application>
 </manifest>

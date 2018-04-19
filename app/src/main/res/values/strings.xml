@@ -52,5 +52,8 @@
     <string name="delete_account_failed">Delete account failed</string>
     <string name="title_activity_main">MainActivity</string>
 
-
+    <!--    Facebook APP String-->
+    <string name="facebook_app_id">618592388479447</string>
+    <string name="facebook_application_id" translatable="false">618592388479447</string>
+    <string name="fb_login_protocol_scheme">fb618592388479447</string>
 </resources>

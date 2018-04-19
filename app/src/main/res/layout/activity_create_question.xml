@@ -34,7 +34,6 @@
             android:textColor="@color/colorWhite"
             android:visibility="invisible"/>
     </LinearLayout>
-
     <LinearLayout
             android:id="@+id/questionTypeLinearLayout"
             android:layout_width="match_parent"
@@ -61,14 +60,12 @@
                 android:onClick="btnQuestionCategoryOnClick" />
         </LinearLayout>
     </LinearLayout>
-
     <FrameLayout
         android:id="@+id/frameLayoutCreateQuestion"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
     </FrameLayout>
-
     <LinearLayout
         android:id="@+id/termsLayout"
         android:layout_width="match_parent"

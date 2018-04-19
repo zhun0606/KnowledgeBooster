@@ -5,29 +5,20 @@
         android:id="@+id/navigation_previous"
         android:icon="@drawable/ic_back"
         android:title="Back"
-        app:showAsAction="always|withText"
-        />
-
+        app:showAsAction="always|withText" />
     <item
         android:id="@+id/navigation_tips"
         android:icon="@drawable/ic_hint"
         android:title="Hint"
-        app:showAsAction="always|withText"
-        />
-
+        app:showAsAction="always|withText" />
     <item
         android:id="@+id/navigation_analyse"
         android:icon="@drawable/ic_explanation"
         android:title="Explanation"
-        app:showAsAction="always|withText"
-        />
-
+        app:showAsAction="always|withText" />
     <item
         android:id="@+id/navigation_next"
         android:icon="@drawable/ic_next"
         android:title="Next"
-        app:showAsAction="always|withText"
-        />
-
-
+        app:showAsAction="always|withText" />
 </menu>

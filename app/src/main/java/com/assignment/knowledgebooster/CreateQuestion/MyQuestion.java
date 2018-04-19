@@ -47,22 +47,19 @@ public class MyQuestion extends AppCompatActivity {
 
         if(mPrefs.getBoolean("NightMode", true) == true){
             LinearLayout container;
-            LinearLayout myQuestionLinearLayout, myQuestionLinearLayout2;
+            LinearLayout  myQuestionLinearLayout2;
             ImageButton imgBtnBack, imgBtnCreateQuestion, imgBtnExamineQuestion, imgBtnMyContribution;
             TextView txtViewMyQuestionHeader, spacing;
 
             container = findViewById(R.id.container);
-            myQuestionLinearLayout = findViewById(R.id.myQuestionLinearLayout);
             myQuestionLinearLayout2 = findViewById(R.id.myQuestionLinearLayout2);
             imgBtnBack = findViewById(R.id.imgBtnBack);
             imgBtnCreateQuestion = findViewById(R.id.imgBtnCreateQuestion);
             imgBtnExamineQuestion = findViewById(R.id.imgBtnExamineQuestion);
             imgBtnMyContribution = findViewById(R.id.imgBtnMyContribution);
             txtViewMyQuestionHeader = findViewById(R.id.txtViewMyQuestionHeader);
-            spacing = findViewById(R.id.spacing);
 
             container.setBackgroundColor(Color.BLACK);
-            myQuestionLinearLayout.setBackgroundColor(Color.BLACK);
             myQuestionLinearLayout2.setBackgroundColor(Color.BLACK);
             imgBtnBack.setBackgroundColor(Color.BLACK);
             imgBtnCreateQuestion.setBackgroundColor(Color.BLACK);
@@ -70,12 +67,6 @@ public class MyQuestion extends AppCompatActivity {
             imgBtnMyContribution.setBackgroundColor(Color.BLACK);
             txtViewMyQuestionHeader.setBackgroundColor(Color.BLACK);
             txtViewMyQuestionHeader.setTextColor(Color.WHITE);
-            spacing.setBackgroundColor(Color.BLACK);
-
-
-
         }
-
-
     }
 }
