@@ -74,6 +74,8 @@ public class Question extends AppCompatActivity {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         retrieveUser();
+        retrieveQuestion();
+        checkQuestionTypeAndDisplay();
 
         setNightMode();
     }
@@ -136,7 +138,7 @@ public class Question extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUser = dataSnapshot.child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue(User.class);
-                retrieveQuestion();
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -153,6 +155,11 @@ public class Question extends AppCompatActivity {
                 while (questions.getPictionaries().remove(null));
                 while (questions.getScrambles().remove(null));
                 while (questions.getSelections().remove(null));
+
+                questionsToDisplay = dataSnapshot.child("questions").getValue(Questions.class);
+                while (questionsToDisplay.getPictionaries().remove(null));
+                while (questionsToDisplay.getScrambles().remove(null));
+                while (questionsToDisplay.getSelections().remove(null));
                 retrieveAnsweredQuestion();
             }
             @Override
@@ -170,23 +177,6 @@ public class Question extends AppCompatActivity {
                 while (questionAnswered.getPictionaries().remove(null));
                 while (questionAnswered.getScrambles().remove(null));
                 while (questionAnswered.getSelections().remove(null));
-                retrieveQuestion1();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    public void retrieveQuestion1() {
-        DatabaseReference databaseQuestion = FirebaseDatabase.getInstance().getReference();
-        databaseQuestion.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                questionsToDisplay = dataSnapshot.child("questions").getValue(Questions.class);
-                while (questionsToDisplay.getPictionaries().remove(null));
-                while (questionsToDisplay.getScrambles().remove(null));
-                while (questionsToDisplay.getSelections().remove(null));
                 removeAnsweredQuestion();
             }
             @Override
@@ -195,42 +185,52 @@ public class Question extends AppCompatActivity {
             }
         });
     }
-
-    public void removeAnsweredQuestion(){
+    public void removeAnsweredQuestion() {
         ArrayList<Pictionary> questionPictionaryToBeRemove = new ArrayList<>();
         ArrayList<Selection> questionSelectionToBeRemove = new ArrayList<>();
         ArrayList<Scramble> questionScrambleToBeRemove = new ArrayList<>();
-
         for(String ss : questionAnswered.getPictionaries()){
-            for(Pictionary pictionaryQuestion : questionsToDisplay.getPictionaries()){
+            for(Pictionary pictionaryQuestion : questions.getPictionaries()){
                 try{
                     if(pictionaryQuestion.getQuestionId().equals(ss))
                         questionPictionaryToBeRemove.add(pictionaryQuestion);
-                }catch(Exception ex){ ex.printStackTrace(); }
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-        }questionsToDisplay.getPictionaries().removeAll(questionPictionaryToBeRemove);
+        }
+        questions.getPictionaries().removeAll(questionPictionaryToBeRemove);
 
         for(String ss : questionAnswered.getScrambles()){
-            for(Scramble scrambleQuestion : questionsToDisplay.getScrambles()){
+            for(Scramble scrambleQuestion : questions.getScrambles()){
                 try{
                     if(scrambleQuestion.getQuestionId().equals(ss))
                         questionScrambleToBeRemove.add(scrambleQuestion);
-                }catch(Exception ex){ ex.printStackTrace(); }
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-        }questionsToDisplay.getScrambles().removeAll(questionScrambleToBeRemove);
+        }
+        questions.getScrambles().removeAll(questionScrambleToBeRemove);
 
         for(String ss : questionAnswered.getSelections()){
-            for(Selection selectionQuestion : questionsToDisplay.getSelections()){
+            for(Selection selectionQuestion : questions.getSelections()){
                 try{
                     if(selectionQuestion.getQuestionId().equals(ss))
                         questionSelectionToBeRemove.add(selectionQuestion);
-                }catch(Exception ex){ ex.printStackTrace(); }
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-        }questionsToDisplay.getSelections().removeAll(questionSelectionToBeRemove);
+        }
+        questions.getSelections().removeAll(questionSelectionToBeRemove);
 
         checkQuestionTypeAndDisplay();
     }
 
+    ////////////////////////////////////
+    ////    Shuffle the Question    ////
+    ////////////////////////////////////
     public Scramble displayQuestionScramble(){
         ArrayList<Scramble> scrambleQuestion = questions.getScrambles();
         // shuffle the question
@@ -246,8 +246,7 @@ public class Question extends AppCompatActivity {
         return pictionaryQuestion.get(0);
     }
     public Selection displayQuestionSelection(){
-        //Questions questionsToDisplay = removeAnsweredQuestion();
-        ArrayList<Selection> selectionQuestion = questionsToDisplay.getSelections();
+        ArrayList<Selection> selectionQuestion = questions.getSelections();
         // shuffle the question
         Collections.shuffle(selectionQuestion);
         //return first question
@@ -294,18 +293,15 @@ public class Question extends AppCompatActivity {
     protected void correctSelectionAnswer(Selection selection){
         // update Question Answered
         questionAnswered.getSelections().add(selection.getQuestionId());
-        ///////////// indexfound -1
-        for(Selection compare : questions.getSelections()){
-            if(compare.equals(selection))
-                Log.w("",compare.toString());
+        int index = 0;
+        for(int i =0; i < questionsToDisplay.getSelections().size();i++){
+            if( selection.getQuestionId().equals(questionsToDisplay.getSelections().get(i).getQuestionId()));
+                index = i;
         }
-
-        int index = questions.getSelections().indexOf(selection);
-        int totalQuestion = questions.getSelections().get(index).getTotalAnswer() + 1;
-        int correctAnswer = questions.getSelections().get(index).getCorrectAnswer() + 1;
-        questions.getSelections().get(index).setTotalAnswer(totalQuestion);
-        questions.getSelections().get(index).setCorrectAnswer(correctAnswer);
-
+        int totalQuestion = questionsToDisplay.getSelections().get(index).getTotalAnswer() + 1;
+        int correctAnswer = questionsToDisplay.getSelections().get(index).getCorrectAnswer() + 1;
+        questionsToDisplay.getSelections().get(index).setTotalAnswer(totalQuestion);
+        questionsToDisplay.getSelections().get(index).setCorrectAnswer(correctAnswer);
         int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
         int userTotalCorrectQuestionAnswered = currentUser.getTotalCorrectQuestionAnswered() + 1;
         currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
@@ -343,9 +339,15 @@ public class Question extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"Correct Answer",Toast.LENGTH_SHORT).show();
     }
     protected void wrongSelectionAnswer(Selection selection){
-        int index = questions.getSelections().indexOf(selection);
-        int totalQuestion = questions.getSelections().get(index).getTotalAnswer() + 1;
-        questions.getSelections().get(index).setTotalAnswer(totalQuestion);
+        // update Question Answered
+        questionAnswered.getSelections().add(selection.getQuestionId());
+        int index = 0;
+        for(int i =0; i < questionsToDisplay.getSelections().size();i++){
+            if( selection.getQuestionId().equals(questionsToDisplay.getSelections().get(i).getQuestionId()));
+            index = i;
+        }
+        int totalQuestion = questionsToDisplay.getSelections().get(index).getTotalAnswer() + 1;
+        questionsToDisplay.getSelections().get(index).setTotalAnswer(totalQuestion);
         int userTotalQuestionAnswered = currentUser.getTotalQuestionAnswered() + 1;
         currentUser.setTotalQuestionAnswered(userTotalQuestionAnswered);
         Toast.makeText(getApplicationContext(),"Wrong Answer",Toast.LENGTH_SHORT).show();
@@ -410,12 +412,22 @@ public class Question extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
-                    databaseReference.setValue(questions);
+                    databaseReference.setValue(questionsToDisplay);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         });
     }
+
+
+
+
+
+
+
+
+
+
 
     public void btnSearchOnQuestionClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
